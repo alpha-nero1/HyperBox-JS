@@ -2,8 +2,9 @@
 
 HyperBox-JS is a simple alternative to Angular, React and Vue. They are the inspiration for this project.
 
-Link to hyperbox-js-cli: https://www.npmjs.com/package/hyperbox-js-cli
-Link to code repository: https://github.com/alpha-nero1/HyperBox-JS
+## Links
+- Link to hyperbox-js-cli: https://www.npmjs.com/package/hyperbox-js-cli
+- Link to code repository: https://github.com/alpha-nero1/HyperBox-JS
 
 # Box 📦
 
