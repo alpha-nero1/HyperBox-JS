@@ -292,3 +292,5 @@ class BoxUtils {
     SharedBoxCore.loadedBoxes.get(boxConfig.name).set(box._boxId, box);
   }
 }
+
+module.exports = { BoxUtils }

@@ -66,13 +66,5 @@ const loadAllScripts = (appSpecificScripts = []) => {
       console.log(`BoxJs: BoxLoader completed loading scripts (total: ${scripts.length}) 🚀`);
     }
   }
-  BoxLoader.LoadScript(scripts[0], loadNext())
-  
+  BoxLoader.LoadScript(scripts[0], loadNext())  
 }
-
-loadAllScripts([
-  './app/dummy-dialog/dummy-dialog.box.js',
-  './app/animation/animation.box.js',
-  './app/main/main.box.js',
-  './app/data-fetcher/data-fetcher.box.js'
-]);

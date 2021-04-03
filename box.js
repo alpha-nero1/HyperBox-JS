@@ -60,3 +60,5 @@ class Box extends HTMLElement {
     if (typeof this.boxOnDestroyed === 'function') this.boxOnDestroyed();
   }
 }
+
+module.exports = { Box }

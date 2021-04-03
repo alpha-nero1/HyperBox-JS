@@ -1,8 +1,8 @@
-# HyperBox-JS
+# HyperBox-JS 📦🚀✅⚡️⚡️⚡️
 
 HyperBox-JS is a simple alternative to Angular, React and Vue. They are the inspiration for this project.
 
-# Box
+# Box 📦
 
 ## Really, what is it?
 
