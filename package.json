@@ -22,6 +22,15 @@
     "url": "https://github.com/alpha-nero1/BoxJS/issues"
   },
   "dependencies": {
-    "express-favicon": "^2.0.1"
+    "express": "^4.17.1",
+    "express-favicon": "^2.0.1",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.30.0",
+    "webpack-cli": "^4.6.0"
   }
 }
