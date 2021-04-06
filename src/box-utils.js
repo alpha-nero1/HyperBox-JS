@@ -2,7 +2,7 @@
  * @author Alessandro Alberga
  * @description Box utils.
  */
-class BoxUtils {
+export class BoxUtils {
 
   /**
    * Check if a value value is null or empty.
@@ -292,5 +292,3 @@ class BoxUtils {
     SharedBoxCore.loadedBoxes.get(boxConfig.name).set(box._boxId, box);
   }
 }
-
-module.exports = { BoxUtils }

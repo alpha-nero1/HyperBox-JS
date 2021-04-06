@@ -4,12 +4,14 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'hyperbox-js.js',
+    filename: 'index.js',
     library: {
       name: 'hyperbox-js',
       type: 'umd'
-    }
+    },
+    globalObject: 'this'
   },
+  devtool: 'source-map',
   externals: {
     'express-favicon': {
       commonjs: 'express-favicon',
@@ -28,13 +30,16 @@ module.exports = {
       commonjs2: 'express',
       amd: 'express',
       root: 'express',
-    },
+    }
   },
   module: {
     rules: [
       {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
+        resolve: {
+          fullySpecified: false
+        },
         use: {
           loader: 'babel-loader',
           options: {

@@ -1,20 +1,23 @@
+import { BoxInnerCore } from './box-inner-core';
+
 /**
  * @author Alessandro Alberga
  * @description Box CORE.
  */
-class BoxCore {
-  constructor() {
-    this.loadedBoxes = new Map();
-  }
+export class BoxCore {
+
+  static LoadedBoxes = new Map();
+
+  static BoxRegistry = new Map();
 
   /**
    * Set the box registry. Must be called before init.
    *
    * @param { Map } registry registry map.
    */
-  setBoxRegistry(registry) {
+  static SetBoxRegistry(registry) {
     if (registry) {
-      this.boxRegistry = registry;
+      this.BoxRegistry = registry;
     } else {
       throw new Error('BoxJs: Fatal, no box registry specified.');
     }
@@ -23,22 +26,22 @@ class BoxCore {
   /**
    * Kick off the boxes...
    */
-  init = () => {
+  static Init = () => {
     // Build the elements registry.
-    this.buildBoxesCustomElementRegistry()
+    this.BuildBoxesCustomElementRegistry()
     // Add the root box.
-    document.getElementById('root').innerHTML = '<box-main title="SILLy" randomValue="Hello there general!"></box-main>'
+    BoxInnerCore.Document.getElementById('root').innerHTML = '<box-main></box-main>'
   }
 
   /**
    * Crawl the box registry and builds all of the custom elements.
    */
-  buildBoxesCustomElementRegistry() {
-    this.boxRegistry.forEach(boxClass => {
+  static BuildBoxesCustomElementRegistry() {
+    this.BoxRegistry.forEach(boxClass => {
       if (boxClass._BoxConfig) {
         const { _BoxConfig: boxConfig } = boxClass;
         if (boxConfig) {
-          customElements.define(boxConfig.name, boxClass)
+          BoxInnerCore.Window.customElements.define(boxConfig.name, boxClass)
           console.log(`BoxJS: Defined: "${boxConfig.name}"`)
         } 
       } else {
@@ -52,9 +55,9 @@ class BoxCore {
    *
    * @param { any } boxName name of box.
    */
-  boxInstanceFactory = (boxClassName) => {
+  BoxInstanceFactory = (boxClassName) => {
     const boxCapitalisedName = BoxUtils.CapitalizeFirstLetter(boxClassName);
-    const instance = new (this.boxRegistry.get(boxCapitalisedName))()
+    const instance = new (this.BoxRegistry.get(boxCapitalisedName))()
     return instance;
   }
   
@@ -63,9 +66,9 @@ class BoxCore {
    *
    * @param { any } box box.
    */
-  createBoxContainer = (box) => {
+  CreateBoxContainer = (box) => {
     const boxConfig = box.constructor._BoxConfig;
-    const boxContainer = document.createElement('div');
+    const boxContainer = BoxInnerCore.Document.createElement('div');
     boxContainer.setAttribute('id', box._boxId);
     boxContainer.setAttribute('class', boxConfig.name);
     return boxContainer;
@@ -76,10 +79,10 @@ class BoxCore {
    *
    * @param { any } boxConfig box config.
    */
-  getNewBoxId(boxConfig) {
+  static GetNewBoxId(boxConfig) {
     let boxCount = 0;
-    if (this.loadedBoxes.get(boxConfig.name)) {
-      boxCount = this.loadedBoxes.get(boxConfig.name).size;
+    if (BoxCore.loadedBoxes.get(boxConfig.name)) {
+      boxCount = BoxCore.loadedBoxes.get(boxConfig.name).size;
     }
     const boxId = `${boxConfig.name}-${boxCount}`;
     return boxId;
@@ -91,10 +94,10 @@ class BoxCore {
    * @param { any } box the box to add to the DOM.
    * @param { String } parentBoxId parents box id.
    */
-  addBoxToDOM = (box, parentBoxId) => {
-    const boxParent = document.getElementById(parentBoxId);
+  static AddBoxToDOM = (box, parentBoxId) => {
+    const boxParent = BoxInnerCore.Document.getElementById(parentBoxId);
     const boxConfig = box.constructor._BoxConfig;
-    const newBoxId = this.getNewBoxId(boxConfig);
+    const newBoxId = this.GetNewBoxId(boxConfig);
     box._boxId = newBoxId;
     box._name = boxConfig.name;
     // Add box to loaded boxes.
@@ -106,7 +109,7 @@ class BoxCore {
       BoxLoader.LoadStylesheet(boxConfig.styleSheetPath);
     }
     // Setup the box container.
-    const boxContainer = this.createBoxContainer(box)
+    const boxContainer = this.CreateBoxContainer(box)
     // Set retaining values.
     box._container = boxContainer;
     // Setup the initial markup and add box to parent!
@@ -135,25 +138,24 @@ class BoxCore {
    * @param {*} name 
    * @param {*} parentBoxId 
    */
-  makeBox = (className, parentBoxId) => {
-    const box = this.boxInstanceFactory(className);
+  static MakeBox = (className, parentBoxId) => {
+    const box = this.BoxInstanceFactory(className);
     box._className = className;
     box._parentBoxId = parentBoxId;
-    return this.addBoxToDOM(box, parentBoxId);  
+    return this.AddBoxToDOM(box, parentBoxId);  
   }
 }
 
-
-const SharedBoxCore = new BoxCore();
-console.log('BoxJs: Setup SharedBoxCore')
-const SharedBoxCoreAPI = new BoxCoreAPI();
-console.log('BoxJs: Setup SharedBoxCoreAPI')
-SharedBoxCore.setBoxRegistry(new Map([
-  ['MainBox', MainBox],
-  ['DialogBox', DialogBox],
-  ['AnimationBox', AnimationBox],
-  ['NavigatorBox', NavigatorBox],
-  ['DummyDialogBox', DummyDialogBox],
-  ['DataFetcherBox', DataFetcherBox]
-]));
-SharedBoxCore.init();
+// const SharedBoxCore = new BoxCore();
+// console.log('BoxJs: Setup SharedBoxCore')
+// const SharedBoxCoreAPI = new BoxCoreAPI();
+// console.log('BoxJs: Setup SharedBoxCoreAPI')
+// SharedBoxCore.setBoxRegistry(new Map([
+//   ['MainBox', MainBox],
+//   ['DialogBox', DialogBox],
+//   ['AnimationBox', AnimationBox],
+//   ['NavigatorBox', NavigatorBox],
+//   ['DummyDialogBox', DummyDialogBox],
+//   ['DataFetcherBox', DataFetcherBox]
+// ]));
+// SharedBoxCore.init();

@@ -1,9 +1,9 @@
-const { Box } = require('./box');
-const CoreBoxes = require('./core-boxes');
-const startBoxServer = require('./start-box-server');
+import {Box} from './box';
+import {BoxCore} from './box-core';
+import startBoxServer from './start-box-server';
 
-module.exports = {
+export default {
   Box,
-  ...CoreBoxes,
+  BoxCore,
   startBoxServer
 };

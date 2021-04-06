@@ -3,7 +3,7 @@ const favicon = require('express-favicon');
 const path = require('path');
 const port = process.env.PORT || 2021;
 
-module.exports = (dir) => {
+export default (dir) => {
   const app = express();
   const pubDir = dir + '/public'
   const distDir = dir + '/dist'

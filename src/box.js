@@ -1,8 +1,13 @@
+import { BoxUtils } from './box-utils';
+import { BoxInnerCore } from './box-inner-core';
+
 /**
  * @author Alessandro Alberga
  * @description Describes the base structure of a box.
  */
-class Box extends HTMLElement {
+const htmlElementClass = (BoxInnerCore.Window.HTMLElement || (() => null))
+
+export class Box extends htmlElementClass {
 
   constructor() {
     super();
@@ -32,7 +37,7 @@ class Box extends HTMLElement {
    * Get the parent box from the parentBoxId set.
    */
   getParentBox() {
-    return document.getElementById(this._parentBoxId);
+    return BoxInnerCore.Document.getElementById(this._parentBoxId);
   }
 
   /**
@@ -49,7 +54,7 @@ class Box extends HTMLElement {
    * @param { Number } id box id. 
    */
   getBoxElementById(id) {
-    const element = document.getElementById(`${this._boxId}-${id}`)
+    const element = BoxInnerCore.Document.getElementById(`${this._boxId}-${id}`)
     return element;
   }
 
@@ -60,5 +65,3 @@ class Box extends HTMLElement {
     if (typeof this.boxOnDestroyed === 'function') this.boxOnDestroyed();
   }
 }
-
-module.exports = { Box }
