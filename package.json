@@ -24,7 +24,6 @@
     "url": "https://github.com/alpha-nero1/BoxJS/issues"
   },
   "dependencies": {
-    "circular-dependency-plugin": "^5.2.2",
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
     "path": "^0.12.7"
