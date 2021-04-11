@@ -1,8 +1,8 @@
 import { BoxUtils } from './box-utils';
 import { HyperBoxCore } from './hyperbox-core';
-import { HyperBoxInnerCore } from './hyperbox-inner-core';
 
 let classImp = () => null;
+
 /**
  * @author Alessandro Alberga
  * @description Describes the base structure of a box.
@@ -35,7 +35,7 @@ if (typeof HTMLElement === 'function') {
      * Get the parent box from the parentBoxId set.
      */
     getParentBox() {
-      return HyperBoxInnerCore.Document.getElementById(this._parentBoxId);
+      return document.getElementById(this._parentBoxId);
     }
   
     /**
@@ -52,7 +52,7 @@ if (typeof HTMLElement === 'function') {
      * @param { Number } id box id. 
      */
     getBoxElementById(id) {
-      const element = HyperBoxInnerCore.Document.getElementById(`${this._boxId}-${id}`)
+      const element = document.getElementById(`${this._boxId}-${id}`)
       return element;
     }
   

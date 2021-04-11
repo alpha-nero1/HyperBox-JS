@@ -202,7 +202,6 @@ export class BoxUtils {
           const { name: attributeName, value: attributeValue } = boxAttribute;
           const trimmedName = BoxUtils.TrimFirstAndLastChar(attributeName);
           if (BoxUtils.IsVariableInputProperty(attributeName) && boxInterface.Inputs && boxInterface.Inputs[trimmedName]) {
-            console.log('aa name', trimmedName)
             // NOTE: add extra logic here that somethow watches [] vars!
             const setterName = BoxUtils.BuildSetterName(trimmedName);
             if (typeof box[setterName] === 'function') {
@@ -216,10 +215,8 @@ export class BoxUtils {
           } else {
             // Is normal stirng or number input property.
             const setterName = BoxUtils.BuildSetterName(attributeName);
-            console.log('aa found setter!', box[setterName])
             if (typeof box[setterName] === 'function') {
               box[attributeName] = boxAttribute.value;
-              console.log('aa value set!', box[attributeName])
             }
           }
         }

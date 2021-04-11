@@ -3,7 +3,9 @@ const package = require('./package.json');
 const filename = package.name;
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    index: './src/index.js'
+  },
   optimization: {
     minimize: false
   },

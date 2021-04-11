@@ -1,4 +1,4 @@
-import { BoxCore } from '../..'
+import { HyperBoxCore } from '../..'
 
 /**
  * @author Alessandro Alberga
@@ -14,7 +14,7 @@ export class DialogService {
    */
   openDialog(boxClassName, argumentsObject) {
     return new Promise((resolve, reject) => {
-      const newDialogBox = BoxCore.MakeBox('DialogBox', 'root')
+      const newDialogBox = HyperBoxCore.MakeBox('DialogBox', 'root')
       newDialogBox.insertDialogInnerBox(
         boxClassName, 
         argumentsObject,

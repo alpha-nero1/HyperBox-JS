@@ -52,184 +52,157 @@ __webpack_require__.d(__webpack_exports__, {
   "Box": () => (/* reexport */ Box),
   "BoxCluster": () => (/* reexport */ BoxCluster),
   "HyperBoxCore": () => (/* reexport */ HyperBoxCore),
-  "HyperBoxInnerCore": () => (/* reexport */ HyperBoxInnerCore),
   "startBoxServer": () => (/* reexport */ startBoxServer)
 });
 
-;// CONCATENATED MODULE: ./src/hyperbox-inner-core.js
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var hyperbox_inner_core_document = function document() {
-  return null;
-};
-
-var hyperbox_inner_core_window = function window() {
-  return null;
-};
-
-var HyperBoxInnerCore = function HyperBoxInnerCore() {
-  _classCallCheck(this, HyperBoxInnerCore);
-};
-
-_defineProperty(HyperBoxInnerCore, "Document", hyperbox_inner_core_document || function () {
-  return null;
-});
-
-_defineProperty(HyperBoxInnerCore, "Window", hyperbox_inner_core_window || function () {
-  return null;
-});
-
-_defineProperty(HyperBoxInnerCore, "LoadDOM", function (window, document) {
-  HyperBoxInnerCore.Window = window;
-  HyperBoxInnerCore.Document = document;
-});
 ;// CONCATENATED MODULE: ./src/hyperbox-core.js
-function hyperbox_core_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function hyperbox_core_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-
+var classImp = function classImp() {
+  return null;
+};
 /**
  * @author Alessandro Alberga
  * @description Box CORE.
  */
 
-var HyperBoxCore = /*#__PURE__*/function () {
-  function HyperBoxCore() {
-    var _this = this;
 
-    hyperbox_core_classCallCheck(this, HyperBoxCore);
+if (typeof document !== 'undefined') {
+  var _class, _temp;
 
-    hyperbox_core_defineProperty(this, "BoxInstanceFactory", function (boxClassName) {
-      var boxCapitalisedName = BoxUtils.CapitalizeFirstLetter(boxClassName);
-      var instance = new (_this.BoxRegistry.get(boxCapitalisedName))();
-      return instance;
-    });
+  classImp = (_temp = _class = /*#__PURE__*/function () {
+    function HyperBoxCore() {
+      var _this = this;
 
-    hyperbox_core_defineProperty(this, "CreateBoxContainer", function (box) {
-      var boxConfig = box.constructor._BoxConfig;
-      var boxContainer = HyperBoxInnerCore.Document.createElement('div');
-      boxContainer.setAttribute('id', box._boxId);
-      boxContainer.setAttribute('class', boxConfig.name);
-      return boxContainer;
-    });
-  }
+      _classCallCheck(this, HyperBoxCore);
 
-  _createClass(HyperBoxCore, null, [{
-    key: "SetBoxRegistry",
-    value:
-    /**
-     * Set the box registry. Must be called before init.
-     *
-     * @param { Map } registry registry map.
-     */
-    function SetBoxRegistry(registry) {
-      if (registry) {
-        this.BoxRegistry = registry;
+      _defineProperty(this, "BoxInstanceFactory", function (boxClassName) {
+        var boxCapitalisedName = BoxUtils.CapitalizeFirstLetter(boxClassName);
+        var instance = new (_this.BoxRegistry.get(boxCapitalisedName))();
+        return instance;
+      });
+
+      _defineProperty(this, "CreateBoxContainer", function (box) {
+        var boxConfig = box.constructor._BoxConfig;
+        var boxContainer = document.createElement('div');
+        boxContainer.setAttribute('id', box._boxId);
+        boxContainer.setAttribute('class', boxConfig.name);
+        return boxContainer;
+      });
+    }
+
+    _createClass(HyperBoxCore, null, [{
+      key: "SetBoxRegistry",
+      value:
+      /**
+       * Set the box registry. Must be called before init.
+       *
+       * @param { Map } registry registry map.
+       */
+      function SetBoxRegistry(registry) {
+        if (registry) {
+          this.BoxRegistry = registry;
+        } else {
+          throw new Error('BoxJs: Fatal, no box registry specified.');
+        }
+      }
+      /**
+       * Kick off the boxes...
+       */
+
+    }, {
+      key: "GetNewBoxId",
+      value:
+      /**
+       * Take box config and return the new box id.
+       *
+       * @param { any } boxConfig box config.
+       */
+      function GetNewBoxId(boxConfig) {
+        var boxCount = 0;
+
+        if (HyperBoxCore.LoadedBoxes.get(boxConfig.name)) {
+          boxCount = HyperBoxCore.LoadedBoxes.get(boxConfig.name).size;
+        }
+
+        var boxId = "".concat(boxConfig.name, "-").concat(boxCount);
+        return boxId;
+      }
+      /**
+       * Add a box to the DOM.
+       *
+       * @param { any } box the box to add to the DOM.
+       * @param { String } parentBoxId parents box id.
+       */
+
+    }]);
+
+    return HyperBoxCore;
+  }(), _defineProperty(_class, "LoadedBoxes", new Map()), _defineProperty(_class, "BoxRegistry", new Map()), _defineProperty(_class, "Init", function () {
+    // Add the root box.
+    document.getElementById('root').innerHTML = '<main-box></main-box>';
+  }), _defineProperty(_class, "AddBoxToDOM", function (box, parentBoxId) {
+    var boxParent = document.getElementById(parentBoxId);
+    var boxConfig = box.constructor._BoxConfig;
+
+    var newBoxId = _class.GetNewBoxId(boxConfig);
+
+    box._boxId = newBoxId;
+    box._name = boxConfig.name; // Add box to loaded boxes.
+
+    BoxUtils.AddBoxToLoadedBoxes(box);
+    BoxUtils.BuildBoxInterfaces(box);
+    BoxUtils.BuildBoxStandardVariables(box); // Setup styles.
+
+    if (boxConfig.styleSheetPath) {
+      BoxLoader.LoadStylesheet(boxConfig.styleSheetPath);
+    } // Setup the box container.
+
+
+    var boxContainer = _class.CreateBoxContainer(box); // Set retaining values.
+
+
+    box._container = boxContainer; // Setup the initial markup and add box to parent!
+
+    BoxUtils.DisplayBox(box);
+
+    if (parentBoxId) {
+      // Only add to DOM if a parentBoxId provided...
+      if (boxParent) {
+        boxParent.appendChild(boxContainer);
       } else {
-        throw new Error('BoxJs: Fatal, no box registry specified.');
+        throw new Error("BoxJS: Cannot add box to null parent. \"".concat(parentBoxId, "\""));
       }
+    } // Allow the box to detect for changes.
+
+
+    box.detectBoxChanges = function () {
+      return BoxUtils.DisplayBox(box);
+    }; // Run the displayed hook if present.
+
+
+    if (typeof box.boxOnDisplayed === 'function') {
+      box.boxOnDisplayed();
     }
-    /**
-     * Kick off the boxes...
-     */
 
-  }, {
-    key: "GetNewBoxId",
-    value:
-    /**
-     * Take box config and return the new box id.
-     *
-     * @param { any } boxConfig box config.
-     */
-    function GetNewBoxId(boxConfig) {
-      var boxCount = 0;
+    box._init = true;
+    return box;
+  }), _defineProperty(_class, "MakeBox", function (className, parentBoxId) {
+    var box = _class.BoxInstanceFactory(className);
 
-      if (HyperBoxCore.LoadedBoxes.get(boxConfig.name)) {
-        boxCount = HyperBoxCore.LoadedBoxes.get(boxConfig.name).size;
-      }
+    box._className = className;
+    box._parentBoxId = parentBoxId;
+    return _class.AddBoxToDOM(box, parentBoxId);
+  }), _temp);
+}
 
-      var boxId = "".concat(boxConfig.name, "-").concat(boxCount);
-      return boxId;
-    }
-    /**
-     * Add a box to the DOM.
-     *
-     * @param { any } box the box to add to the DOM.
-     * @param { String } parentBoxId parents box id.
-     */
-
-  }]);
-
-  return HyperBoxCore;
-}();
-
-hyperbox_core_defineProperty(HyperBoxCore, "LoadedBoxes", new Map());
-
-hyperbox_core_defineProperty(HyperBoxCore, "BoxRegistry", new Map());
-
-hyperbox_core_defineProperty(HyperBoxCore, "Init", function () {
-  // Add the root box.
-  HyperBoxInnerCore.Document.getElementById('root').innerHTML = '<main-box></main-box>';
-});
-
-hyperbox_core_defineProperty(HyperBoxCore, "AddBoxToDOM", function (box, parentBoxId) {
-  var boxParent = HyperBoxInnerCore.Document.getElementById(parentBoxId);
-  var boxConfig = box.constructor._BoxConfig;
-  var newBoxId = HyperBoxCore.GetNewBoxId(boxConfig);
-  box._boxId = newBoxId;
-  box._name = boxConfig.name; // Add box to loaded boxes.
-
-  BoxUtils.AddBoxToLoadedBoxes(box);
-  BoxUtils.BuildBoxInterfaces(box);
-  BoxUtils.BuildBoxStandardVariables(box); // Setup styles.
-
-  if (boxConfig.styleSheetPath) {
-    BoxLoader.LoadStylesheet(boxConfig.styleSheetPath);
-  } // Setup the box container.
-
-
-  var boxContainer = HyperBoxCore.CreateBoxContainer(box); // Set retaining values.
-
-  box._container = boxContainer; // Setup the initial markup and add box to parent!
-
-  BoxUtils.DisplayBox(box);
-
-  if (parentBoxId) {
-    // Only add to DOM if a parentBoxId provided...
-    if (boxParent) {
-      boxParent.appendChild(boxContainer);
-    } else {
-      throw new Error("BoxJS: Cannot add box to null parent. \"".concat(parentBoxId, "\""));
-    }
-  } // Allow the box to detect for changes.
-
-
-  box.detectBoxChanges = function () {
-    return BoxUtils.DisplayBox(box);
-  }; // Run the displayed hook if present.
-
-
-  if (typeof box.boxOnDisplayed === 'function') {
-    box.boxOnDisplayed();
-  }
-
-  box._init = true;
-  return box;
-});
-
-hyperbox_core_defineProperty(HyperBoxCore, "MakeBox", function (className, parentBoxId) {
-  var box = HyperBoxCore.BoxInstanceFactory(className);
-  box._className = className;
-  box._parentBoxId = parentBoxId;
-  return HyperBoxCore.AddBoxToDOM(box, parentBoxId);
-});
+var HyperBoxCore = classImp;
 ;// CONCATENATED MODULE: ./src/box-utils.js
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -481,8 +454,7 @@ var box_utils_BoxUtils = /*#__PURE__*/function () {
             var trimmedName = BoxUtils.TrimFirstAndLastChar(attributeName);
 
             if (BoxUtils.IsVariableInputProperty(attributeName) && boxInterface.Inputs && boxInterface.Inputs[trimmedName]) {
-              console.log('aa name', trimmedName); // NOTE: add extra logic here that somethow watches [] vars!
-
+              // NOTE: add extra logic here that somethow watches [] vars!
               var setterName = BoxUtils.BuildSetterName(trimmedName);
 
               if (typeof box[setterName] === 'function') {
@@ -501,11 +473,8 @@ var box_utils_BoxUtils = /*#__PURE__*/function () {
               // Is normal stirng or number input property.
               var _setterName = BoxUtils.BuildSetterName(attributeName);
 
-              console.log('aa found setter!', box[_setterName]);
-
               if (typeof box[_setterName] === 'function') {
                 box[attributeName] = boxAttribute.value;
-                console.log('aa value set!', box[attributeName]);
               }
             }
           }
@@ -624,8 +593,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-
-var classImp = function classImp() {
+var box_classImp = function classImp() {
   return null;
 };
 /**
@@ -635,7 +603,7 @@ var classImp = function classImp() {
 
 
 if (typeof HTMLElement === 'function') {
-  classImp = /*#__PURE__*/function (_HTMLElement) {
+  box_classImp = /*#__PURE__*/function (_HTMLElement) {
     _inherits(Box, _HTMLElement);
 
     var _super = _createSuper(Box);
@@ -678,7 +646,7 @@ if (typeof HTMLElement === 'function') {
     }, {
       key: "getParentBox",
       value: function getParentBox() {
-        return HyperBoxInnerCore.Document.getElementById(this._parentBoxId);
+        return document.getElementById(this._parentBoxId);
       }
       /**
        * Allows any box to terminate itself.
@@ -700,7 +668,7 @@ if (typeof HTMLElement === 'function') {
     }, {
       key: "getBoxElementById",
       value: function getBoxElementById(id) {
-        var element = HyperBoxInnerCore.Document.getElementById("".concat(this._boxId, "-").concat(id));
+        var element = document.getElementById("".concat(this._boxId, "-").concat(id));
         return element;
       }
       /**
@@ -718,29 +686,36 @@ if (typeof HTMLElement === 'function') {
   }( /*#__PURE__*/_wrapNativeSuper(HTMLElement));
 }
 
-var Box = classImp;
+var Box = box_classImp;
 ;// CONCATENATED MODULE: ./src/box-loader.js
 function box_loader_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function box_loader_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-
+var box_loader_classImp = function classImp() {
+  return null;
+};
 /**
  * @author Alessandro Alberga
  * @description Box loader class.
  */
 
-var box_loader_BoxLoader = function BoxLoader() {
-  box_loader_classCallCheck(this, BoxLoader);
-};
 
-box_loader_defineProperty(box_loader_BoxLoader, "LoadStylesheet", function (path) {
-  var link = HyperBoxInnerCore.Document.createElement('link');
-  link.type = 'text/css';
-  link.rel = 'stylesheet';
-  link.href = path;
-  HyperBoxInnerCore.Document.head.appendChild(link);
-});
+if (typeof document !== 'undefined') {
+  var box_loader_class, box_loader_temp;
+
+  box_loader_classImp = (box_loader_temp = box_loader_class = function BoxLoader() {
+    box_loader_classCallCheck(this, BoxLoader);
+  }, box_loader_defineProperty(box_loader_class, "LoadStylesheet", function (path) {
+    var link = HyperBoxInnerCore.Document.createElement('link');
+    link.type = 'text/css';
+    link.rel = 'stylesheet';
+    link.href = path;
+    HyperBoxInnerCore.Document.head.appendChild(link);
+  }), box_loader_temp);
+}
+
+var box_loader_BoxLoader = box_loader_classImp;
 ;// CONCATENATED MODULE: ./src/box-cluster/box-cluster.js
 function box_cluster_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -748,32 +723,40 @@ function box_cluster_defineProperty(obj, key, value) { if (key in obj) { Object.
 
 
 
+var box_cluster_classImp = function classImp() {
+  return null;
+};
 /**
  * @author Alessandro Alberga
  * @description Hyperbox BoxNode class.
  */
 
-var BoxCluster = function BoxCluster(boxes) {
-  box_cluster_classCallCheck(this, BoxCluster);
 
-  box_cluster_defineProperty(this, "initBox", function (boxClass) {
-    if (boxClass._BoxConfig) {
-      var boxConfig = boxClass._BoxConfig;
+if (typeof window !== 'undefined') {
+  box_cluster_classImp = function BoxCluster(boxes) {
+    box_cluster_classCallCheck(this, BoxCluster);
 
-      if (boxConfig) {
-        if (boxConfig.styleSheetPath) box_loader_BoxLoader.LoadStylesheet(boxConfig.styleSheetPath);
-        HyperBoxInnerCore.Window.customElements.define(boxConfig.name, boxClass);
-        console.log("HyperBox-JS: Defined: \"".concat(boxConfig.name, "\""));
+    box_cluster_defineProperty(this, "initBox", function (boxClass) {
+      if (boxClass._BoxConfig) {
+        var boxConfig = boxClass._BoxConfig;
+
+        if (boxConfig) {
+          if (boxConfig.styleSheetPath) box_loader_BoxLoader.LoadStylesheet(boxConfig.styleSheetPath);
+          window.customElements.define(boxConfig.name, boxClass);
+          console.log("HyperBox-JS: Defined: \"".concat(boxConfig.name, "\""));
+        }
+      } else {
+        throw new Error("HyperBox-JS: _BoxConfig not present on: \"".concat(boxClass, "\""));
       }
-    } else {
-      throw new Error("HyperBox-JS: _BoxConfig not present on: \"".concat(boxClass, "\""));
-    }
-  });
+    });
 
-  if (boxes && boxes.length) {
-    boxes.forEach(this.initBox);
-  }
-};
+    if (boxes && boxes.length) {
+      boxes.forEach(this.initBox);
+    }
+  };
+}
+
+var BoxCluster = box_cluster_classImp;
 ;// CONCATENATED MODULE: ./src/logging/console-colours.js
 var consoleColours = {
   Reset: "\x1b[0m",
@@ -867,7 +850,6 @@ if (typeof require === 'function') {
 
 
 ;// CONCATENATED MODULE: ./src/index.js
-
 
 
 
