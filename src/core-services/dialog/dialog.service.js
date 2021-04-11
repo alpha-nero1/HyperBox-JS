@@ -1,8 +1,10 @@
+import { BoxCore } from '../..'
+
 /**
  * @author Alessandro Alberga
  * @description Dialog service.
  */
-class DialogService {
+export class DialogService {
 
   /**
    * Open a diaolg.
@@ -12,7 +14,7 @@ class DialogService {
    */
   openDialog(boxClassName, argumentsObject) {
     return new Promise((resolve, reject) => {
-      const newDialogBox = SharedBoxCore.makeBox('DialogBox', 'root')
+      const newDialogBox = BoxCore.MakeBox('DialogBox', 'root')
       newDialogBox.insertDialogInnerBox(
         boxClassName, 
         argumentsObject,

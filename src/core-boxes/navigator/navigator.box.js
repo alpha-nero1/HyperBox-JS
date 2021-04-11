@@ -1,8 +1,10 @@
+import { Box } from '../../box';
+
 /**
  * @author Alessandro Alberga
  * @description Navigator box.
  */
-class NavigatorBox extends Box {
+export class NavigatorBox extends Box {
 
   static _BoxConfig = {
     name: 'NavigatorBox'

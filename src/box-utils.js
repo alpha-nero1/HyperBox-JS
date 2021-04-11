@@ -1,3 +1,5 @@
+import { HyperBoxCore } from './hyperbox-core';
+
 /**
  * @author Alessandro Alberga
  * @description Box utils.
@@ -138,7 +140,6 @@ export class BoxUtils {
         box[interfaceProp] = value;
         box.detectBoxChanges();
       }
-      console.log('aa made setter', setterName)
       box[getterName] = () => {
         return box[interfaceProp];
       }
@@ -150,7 +151,6 @@ export class BoxUtils {
         box[interfaceProp] = inputsWithStockProperties[interfaceProp];
       }
     });
-    console.log('aa setup box inputs', box)
   }
 
   /**
@@ -282,13 +282,13 @@ export class BoxUtils {
    */
   static AddBoxToLoadedBoxes(box) {
     const boxConfig = box.constructor._BoxConfig;
-    const boxStore = SharedBoxCore.loadedBoxes.get(boxConfig.name);
+    const boxStore = HyperBoxCore.LoadedBoxes.get(boxConfig.name);
     if (!boxStore) {
-      SharedBoxCore.loadedBoxes.set(
+      HyperBoxCore.LoadedBoxes.set(
         boxConfig.name, 
         new Map()
       )
     }
-    SharedBoxCore.loadedBoxes.get(boxConfig.name).set(box._boxId, box);
+    HyperBoxCore.LoadedBoxes.get(boxConfig.name).set(box._boxId, box);
   }
 }

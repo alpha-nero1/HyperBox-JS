@@ -2,7 +2,7 @@
  * @author Alessandro Alberga
  * @description http service.
  */
-class HttpService {
+export class HttpService {
 
   constructor() { }
 

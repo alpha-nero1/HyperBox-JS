@@ -1,10 +1,10 @@
-import { BoxInnerCore } from './box-inner-core';
+import { HyperBoxInnerCore } from './hyperbox-inner-core';
 
 /**
  * @author Alessandro Alberga
  * @description Box CORE.
  */
-export class BoxCore {
+export class HyperBoxCore {
 
   static LoadedBoxes = new Map();
 
@@ -27,27 +27,8 @@ export class BoxCore {
    * Kick off the boxes...
    */
   static Init = () => {
-    // Build the elements registry.
-    this.BuildBoxesCustomElementRegistry()
     // Add the root box.
-    BoxInnerCore.Document.getElementById('root').innerHTML = '<box-main></box-main>'
-  }
-
-  /**
-   * Crawl the box registry and builds all of the custom elements.
-   */
-  static BuildBoxesCustomElementRegistry() {
-    this.BoxRegistry.forEach(boxClass => {
-      if (boxClass._BoxConfig) {
-        const { _BoxConfig: boxConfig } = boxClass;
-        if (boxConfig) {
-          BoxInnerCore.Window.customElements.define(boxConfig.name, boxClass)
-          console.log(`BoxJS: Defined: "${boxConfig.name}"`)
-        } 
-      } else {
-        throw new Error(`BoxJS: _BoxConfig not present on: "${boxClass}"`)
-      }
-    })
+    HyperBoxInnerCore.Document.getElementById('root').innerHTML = '<main-box></main-box>'
   }
   
   /**
@@ -68,7 +49,7 @@ export class BoxCore {
    */
   CreateBoxContainer = (box) => {
     const boxConfig = box.constructor._BoxConfig;
-    const boxContainer = BoxInnerCore.Document.createElement('div');
+    const boxContainer = HyperBoxInnerCore.Document.createElement('div');
     boxContainer.setAttribute('id', box._boxId);
     boxContainer.setAttribute('class', boxConfig.name);
     return boxContainer;
@@ -81,8 +62,8 @@ export class BoxCore {
    */
   static GetNewBoxId(boxConfig) {
     let boxCount = 0;
-    if (BoxCore.loadedBoxes.get(boxConfig.name)) {
-      boxCount = BoxCore.loadedBoxes.get(boxConfig.name).size;
+    if (HyperBoxCore.LoadedBoxes.get(boxConfig.name)) {
+      boxCount = HyperBoxCore.LoadedBoxes.get(boxConfig.name).size;
     }
     const boxId = `${boxConfig.name}-${boxCount}`;
     return boxId;
@@ -95,7 +76,7 @@ export class BoxCore {
    * @param { String } parentBoxId parents box id.
    */
   static AddBoxToDOM = (box, parentBoxId) => {
-    const boxParent = BoxInnerCore.Document.getElementById(parentBoxId);
+    const boxParent = HyperBoxInnerCore.Document.getElementById(parentBoxId);
     const boxConfig = box.constructor._BoxConfig;
     const newBoxId = this.GetNewBoxId(boxConfig);
     box._boxId = newBoxId;
@@ -145,17 +126,3 @@ export class BoxCore {
     return this.AddBoxToDOM(box, parentBoxId);  
   }
 }
-
-// const SharedBoxCore = new BoxCore();
-// console.log('BoxJs: Setup SharedBoxCore')
-// const SharedBoxCoreAPI = new BoxCoreAPI();
-// console.log('BoxJs: Setup SharedBoxCoreAPI')
-// SharedBoxCore.setBoxRegistry(new Map([
-//   ['MainBox', MainBox],
-//   ['DialogBox', DialogBox],
-//   ['AnimationBox', AnimationBox],
-//   ['NavigatorBox', NavigatorBox],
-//   ['DummyDialogBox', DummyDialogBox],
-//   ['DataFetcherBox', DataFetcherBox]
-// ]));
-// SharedBoxCore.init();

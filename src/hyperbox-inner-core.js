@@ -1,13 +1,13 @@
 const document = () => null;
 const window = () => null;
 
-export class BoxInnerCore {
+export class HyperBoxInnerCore {
   static Document = (document || (() => null));
 
   static Window = (window || (() => null));
 
   static LoadDOM = (window, document) => {
-    BoxInnerCore.Window = window;
-    BoxInnerCore.Document = document;
+    HyperBoxInnerCore.Window = window;
+    HyperBoxInnerCore.Document = document;
   }
 }

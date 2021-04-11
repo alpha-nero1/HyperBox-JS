@@ -1,9 +1,5 @@
-import {Box} from './box';
-import {BoxCore} from './box-core';
-import startBoxServer from './start-box-server';
-
-export default {
-  Box,
-  BoxCore,
-  startBoxServer
-};
+export * from './box';
+export * from './hyperbox-inner-core';
+export * from './hyperbox-core';
+export * from './box-cluster/box-cluster';
+export * from './start-box-server';

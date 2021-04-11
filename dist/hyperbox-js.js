@@ -1,2 +1,879 @@
-!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports["hyperbox-js"]=t():e["hyperbox-js"]=t()}(this,(function(){return(()=>{"use strict";var e={d:(t,n)=>{for(var o in n)e.o(n,o)&&!e.o(t,o)&&Object.defineProperty(t,o,{enumerable:!0,get:n[o]})},o:(e,t)=>Object.prototype.hasOwnProperty.call(e,t),r:e=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})}},t={};function n(e){return(n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function o(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);t&&(o=o.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),n.push.apply(n,o)}return n}function r(e,t){for(var n=0;n<t.length;n++){var o=t[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,o.key,o)}}function i(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}e.r(t),e.d(t,{default:()=>O});var a=function(){function e(){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e)}var t,n;return t=e,n=[{key:"BuildPrefixedFunctionName",value:function(t,n){var o=e.CapitalizeFirstLetter(n);return"".concat(t).concat(o)}},{key:"BuildSetterName",value:function(t){return e.BuildPrefixedFunctionName("set",t)}},{key:"BuildGetterName",value:function(t){return e.BuildPrefixedFunctionName("get",t)}},{key:"CapitalizeFirstLetter",value:function(e){if(e&&e.length){var t=e[0].toUpperCase();return"".concat(t).concat(e.substr(1,e.length))}return e}},{key:"LoadJSON",value:function(e){return new Promise((function(t){var n=new XMLHttpRequest;n.overrideMimeType("application/json"),n.open("GET",e,!0),n.onreadystatechange=function(){console.log("request args",n.readyState,n.status),4===n.readyState&&200===n.status&&t(JSON.parse(n.response))},n.send(null)}))}},{key:"DisplayBox",value:function(t){if(t&&"function"==typeof t.display){t._parentBox&&t._parentBox.detectBoxChanges(),e.LoadDOMAttributes(t);var n=t.display(t);t.innerHTML=n,t._init&&"function"==typeof t.boxOnRedisplayed&&t.boxOnRedisplayed()}}},{key:"BuildBoxInterfaces",value:function(t){if(t){var n=t.constructor._BoxInterface;n&&(e.BuildBoxInputs(t,n.Inputs||{}),n.Outputs&&e.BuildBoxOutputs(t,n.Outputs))}}},{key:"BuildBoxInputs",value:function(t,n){var r=function(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?o(Object(n),!0).forEach((function(t){i(e,t,n[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):o(Object(n)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))}))}return e}({_parentBoxId:null},n);Object.keys(r).forEach((function(n){var o=e.BuildSetterName(n),i=e.BuildGetterName(n);t[o]=function(e){t[n]=e,t.detectBoxChanges()},console.log("aa made setter",o),t[i]=function(){return t[n]},null!==r[n]&&void 0!==r[n]&&(t[n]=r[n])})),console.log("aa setup box inputs",t)}},{key:"BuildBoxOutputs",value:function(t,n){Object.keys(n).forEach((function(n){var o=new CustomEvent("(".concat(n,")"),{detail:t}),r="_event_".concat(n);t[r]=o,t[e.BuildPrefixedFunctionName("dispatch",n)]=function(){t.dispatchEvent(t[r])},t[e.BuildPrefixedFunctionName("add","".concat(n,"Listener"))]=function(e){t.addEventListener("(".concat(n,")"),e,!1)},t[e.BuildPrefixedFunctionName("remove","".concat(n,"Listener"))]=function(){t.removeEventListener("(".concat(n,")"),callback)}}))}},{key:"BuildBoxStandardVariables",value:function(e){var t="SharedBoxCore.loadedBoxes.get('".concat(e._name,"').get('").concat(e._boxId,"')");e._context=t}},{key:"LoadDOMAttributes",value:function(t){if(t.attributes){var n=t.constructor._BoxInterface;if(n)for(var o=0;o<t.attributes.length;o++){var r=t.attributes.item(o),i=r.name,a=r.value,u=e.TrimFirstAndLastChar(i);if(e.IsVariableInputProperty(i)&&n.Inputs&&n.Inputs[u]){console.log("aa name",u);var c=e.BuildSetterName(u);"function"==typeof t[c]&&(t[u]=r.value)}else if(e.IsOutputProperty(i)&&n.Outputs&&n.Outputs[u])!function(){var n=e.GetFunctionNameFromFunctionCallString(a),o=t.getParentBox();t.addEventListener(i,(function(e){return o[n](e)}))}();else{var l=e.BuildSetterName(i);console.log("aa found setter!",t[l]),"function"==typeof t[l]&&(t[i]=r.value,console.log("aa value set!",t[i]))}}}}},{key:"IsVariableInputProperty",value:function(e){if(e&&e.length)return e.length>2&&"["===e[0]&&"]"===e[e.length-1]}},{key:"GetFunctionNameFromFunctionCallString",value:function(e){}},{key:"IsOutputProperty",value:function(e){if(e&&e.length)return e.length>2&&"("===e[0]&&")"===e[e.length-1]}},{key:"TrimFirstAndLastChar",value:function(e){var t=e;return e&&e.length>2&&(t=t.slice(1,e.length-1)),t}},{key:"AddBoxToLoadedBoxes",value:function(e){var t=e.constructor._BoxConfig;SharedBoxCore.loadedBoxes.get(t.name)||SharedBoxCore.loadedBoxes.set(t.name,new Map),SharedBoxCore.loadedBoxes.get(t.name).set(e._boxId,e)}}],null&&r(t.prototype,null),n&&r(t,n),e}();function u(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}i(a,"IsNullOrEmpty",(function(e){return"string"==typeof e?!e.length:"object"!==n(e)||!Object.keys(e||{}).length}));var c=function e(){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e)};function l(e){return(l="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function s(e,t){for(var n=0;n<t.length;n++){var o=t[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,o.key,o)}}function f(e,t){return(f=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function d(e,t){return!t||"object"!==l(t)&&"function"!=typeof t?function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}(e):t}function p(e){return(p=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}u(c,"Document",function(){return null}||function(){return null}),u(c,"Window",function(){return null}||function(){return null}),u(c,"LoadDOM",(function(e,t){c.Window=e,c.Document=t}));var y=function(e){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&f(e,t)}(u,e);var t,n,o,r,i=(o=u,r=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(e){return!1}}(),function(){var e,t=p(o);if(r){var n=p(this).constructor;e=Reflect.construct(t,arguments,n)}else e=t.apply(this,arguments);return d(this,e)});function u(){return function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,u),i.call(this)}return t=u,(n=[{key:"connectedCallback",value:function(){var e=this,t=this.constructor._BoxConfig;this._boxId=SharedBoxCore.getNewBoxId(t),this.id=this._boxId,this._name=t.name,t.styleSheetPath&&BoxLoader.LoadStylesheet(t.styleSheetPath),a.BuildBoxStandardVariables(this),a.BuildBoxInterfaces(this),a.DisplayBox(this),this.detectBoxChanges=function(){return a.DisplayBox(e)},"function"==typeof this.boxOnDisplayed&&this.boxOnDisplayed(),a.AddBoxToLoadedBoxes(this),this._init=!0}},{key:"getParentBox",value:function(){return c.Document.getElementById(this._parentBoxId)}},{key:"terminateSelf",value:function(){this._container.remove(),"function"==typeof this.boxOnDestroyed&&this.boxOnDestroyed()}},{key:"getBoxElementById",value:function(e){return c.Document.getElementById("".concat(this._boxId,"-").concat(e))}},{key:"disconnectedCallback",value:function(){"function"==typeof this.boxOnDestroyed&&this.boxOnDestroyed()}}])&&s(t.prototype,n),u}(c.Window.HTMLElement||function(){return null});function x(e,t){for(var n=0;n<t.length;n++){var o=t[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,o.key,o)}}function b(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}var B=function(){function e(){var t=this;!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),b(this,"BoxInstanceFactory",(function(e){var n=BoxUtils.CapitalizeFirstLetter(e);return new(t.BoxRegistry.get(n))})),b(this,"CreateBoxContainer",(function(e){var t=e.constructor._BoxConfig,n=c.Document.createElement("div");return n.setAttribute("id",e._boxId),n.setAttribute("class",t.name),n}))}var t,n;return t=e,n=[{key:"SetBoxRegistry",value:function(e){if(!e)throw new Error("BoxJs: Fatal, no box registry specified.");this.BoxRegistry=e}},{key:"BuildBoxesCustomElementRegistry",value:function(){this.BoxRegistry.forEach((function(e){if(!e._BoxConfig)throw new Error('BoxJS: _BoxConfig not present on: "'.concat(e,'"'));var t=e._BoxConfig;t&&(c.Window.customElements.define(t.name,e),console.log('BoxJS: Defined: "'.concat(t.name,'"')))}))}},{key:"GetNewBoxId",value:function(t){var n=0;return e.loadedBoxes.get(t.name)&&(n=e.loadedBoxes.get(t.name).size),"".concat(t.name,"-").concat(n)}}],null&&x(t.prototype,null),n&&x(t,n),e}();b(B,"LoadedBoxes",new Map),b(B,"BoxRegistry",new Map),b(B,"Init",(function(){B.BuildBoxesCustomElementRegistry(),c.Document.getElementById("root").innerHTML="<box-main></box-main>"})),b(B,"AddBoxToDOM",(function(e,t){var n=c.Document.getElementById(t),o=e.constructor._BoxConfig,r=B.GetNewBoxId(o);e._boxId=r,e._name=o.name,BoxUtils.AddBoxToLoadedBoxes(e),BoxUtils.BuildBoxInterfaces(e),BoxUtils.BuildBoxStandardVariables(e),o.styleSheetPath&&BoxLoader.LoadStylesheet(o.styleSheetPath);var i=B.CreateBoxContainer(e);if(e._container=i,BoxUtils.DisplayBox(e),t){if(!n)throw new Error('BoxJS: Cannot add box to null parent. "'.concat(t,'"'));n.appendChild(i)}return e.detectBoxChanges=function(){return BoxUtils.DisplayBox(e)},"function"==typeof e.boxOnDisplayed&&e.boxOnDisplayed(),e._init=!0,e})),b(B,"MakeBox",(function(e,t){var n=B.BoxInstanceFactory(e);return n._className=e,n._parentBoxId=t,B.AddBoxToDOM(n,t)}));var v=require("express"),h=require("express-favicon"),m=require("path"),g=process.env.PORT||2021;const O={Box:y,BoxCore:B,startBoxServer:function(e){var t=v(),n=e+"/public",o=e+"/dist";console.log("HyperBox: starting up application..."),t.use(h(n+"/favicon.ico")),t.use(v.static(o)),t.get("*",(function(e,t){t.sendFile(m.resolve(o,"index.html"))})),t.listen(g,(function(){console.log("HyperBox: application running on port ".concat(g," 🚀"))}))}};return t})()}));
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["hyperbox-js"] = factory();
+	else
+		root["hyperbox-js"] = factory();
+})(this, function() {
+return /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "Box": () => (/* reexport */ Box),
+  "BoxCluster": () => (/* reexport */ BoxCluster),
+  "HyperBoxCore": () => (/* reexport */ HyperBoxCore),
+  "HyperBoxInnerCore": () => (/* reexport */ HyperBoxInnerCore),
+  "startBoxServer": () => (/* reexport */ startBoxServer)
+});
+
+;// CONCATENATED MODULE: ./src/hyperbox-inner-core.js
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var hyperbox_inner_core_document = function document() {
+  return null;
+};
+
+var hyperbox_inner_core_window = function window() {
+  return null;
+};
+
+var HyperBoxInnerCore = function HyperBoxInnerCore() {
+  _classCallCheck(this, HyperBoxInnerCore);
+};
+
+_defineProperty(HyperBoxInnerCore, "Document", hyperbox_inner_core_document || function () {
+  return null;
+});
+
+_defineProperty(HyperBoxInnerCore, "Window", hyperbox_inner_core_window || function () {
+  return null;
+});
+
+_defineProperty(HyperBoxInnerCore, "LoadDOM", function (window, document) {
+  HyperBoxInnerCore.Window = window;
+  HyperBoxInnerCore.Document = document;
+});
+;// CONCATENATED MODULE: ./src/hyperbox-core.js
+function hyperbox_core_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function hyperbox_core_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/**
+ * @author Alessandro Alberga
+ * @description Box CORE.
+ */
+
+var HyperBoxCore = /*#__PURE__*/function () {
+  function HyperBoxCore() {
+    var _this = this;
+
+    hyperbox_core_classCallCheck(this, HyperBoxCore);
+
+    hyperbox_core_defineProperty(this, "BoxInstanceFactory", function (boxClassName) {
+      var boxCapitalisedName = BoxUtils.CapitalizeFirstLetter(boxClassName);
+      var instance = new (_this.BoxRegistry.get(boxCapitalisedName))();
+      return instance;
+    });
+
+    hyperbox_core_defineProperty(this, "CreateBoxContainer", function (box) {
+      var boxConfig = box.constructor._BoxConfig;
+      var boxContainer = HyperBoxInnerCore.Document.createElement('div');
+      boxContainer.setAttribute('id', box._boxId);
+      boxContainer.setAttribute('class', boxConfig.name);
+      return boxContainer;
+    });
+  }
+
+  _createClass(HyperBoxCore, null, [{
+    key: "SetBoxRegistry",
+    value:
+    /**
+     * Set the box registry. Must be called before init.
+     *
+     * @param { Map } registry registry map.
+     */
+    function SetBoxRegistry(registry) {
+      if (registry) {
+        this.BoxRegistry = registry;
+      } else {
+        throw new Error('BoxJs: Fatal, no box registry specified.');
+      }
+    }
+    /**
+     * Kick off the boxes...
+     */
+
+  }, {
+    key: "GetNewBoxId",
+    value:
+    /**
+     * Take box config and return the new box id.
+     *
+     * @param { any } boxConfig box config.
+     */
+    function GetNewBoxId(boxConfig) {
+      var boxCount = 0;
+
+      if (HyperBoxCore.LoadedBoxes.get(boxConfig.name)) {
+        boxCount = HyperBoxCore.LoadedBoxes.get(boxConfig.name).size;
+      }
+
+      var boxId = "".concat(boxConfig.name, "-").concat(boxCount);
+      return boxId;
+    }
+    /**
+     * Add a box to the DOM.
+     *
+     * @param { any } box the box to add to the DOM.
+     * @param { String } parentBoxId parents box id.
+     */
+
+  }]);
+
+  return HyperBoxCore;
+}();
+
+hyperbox_core_defineProperty(HyperBoxCore, "LoadedBoxes", new Map());
+
+hyperbox_core_defineProperty(HyperBoxCore, "BoxRegistry", new Map());
+
+hyperbox_core_defineProperty(HyperBoxCore, "Init", function () {
+  // Add the root box.
+  HyperBoxInnerCore.Document.getElementById('root').innerHTML = '<main-box></main-box>';
+});
+
+hyperbox_core_defineProperty(HyperBoxCore, "AddBoxToDOM", function (box, parentBoxId) {
+  var boxParent = HyperBoxInnerCore.Document.getElementById(parentBoxId);
+  var boxConfig = box.constructor._BoxConfig;
+  var newBoxId = HyperBoxCore.GetNewBoxId(boxConfig);
+  box._boxId = newBoxId;
+  box._name = boxConfig.name; // Add box to loaded boxes.
+
+  BoxUtils.AddBoxToLoadedBoxes(box);
+  BoxUtils.BuildBoxInterfaces(box);
+  BoxUtils.BuildBoxStandardVariables(box); // Setup styles.
+
+  if (boxConfig.styleSheetPath) {
+    BoxLoader.LoadStylesheet(boxConfig.styleSheetPath);
+  } // Setup the box container.
+
+
+  var boxContainer = HyperBoxCore.CreateBoxContainer(box); // Set retaining values.
+
+  box._container = boxContainer; // Setup the initial markup and add box to parent!
+
+  BoxUtils.DisplayBox(box);
+
+  if (parentBoxId) {
+    // Only add to DOM if a parentBoxId provided...
+    if (boxParent) {
+      boxParent.appendChild(boxContainer);
+    } else {
+      throw new Error("BoxJS: Cannot add box to null parent. \"".concat(parentBoxId, "\""));
+    }
+  } // Allow the box to detect for changes.
+
+
+  box.detectBoxChanges = function () {
+    return BoxUtils.DisplayBox(box);
+  }; // Run the displayed hook if present.
+
+
+  if (typeof box.boxOnDisplayed === 'function') {
+    box.boxOnDisplayed();
+  }
+
+  box._init = true;
+  return box;
+});
+
+hyperbox_core_defineProperty(HyperBoxCore, "MakeBox", function (className, parentBoxId) {
+  var box = HyperBoxCore.BoxInstanceFactory(className);
+  box._className = className;
+  box._parentBoxId = parentBoxId;
+  return HyperBoxCore.AddBoxToDOM(box, parentBoxId);
+});
+;// CONCATENATED MODULE: ./src/box-utils.js
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { box_utils_defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function box_utils_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function box_utils_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function box_utils_createClass(Constructor, protoProps, staticProps) { if (protoProps) box_utils_defineProperties(Constructor.prototype, protoProps); if (staticProps) box_utils_defineProperties(Constructor, staticProps); return Constructor; }
+
+function box_utils_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/**
+ * @author Alessandro Alberga
+ * @description Box utils.
+ */
+
+var box_utils_BoxUtils = /*#__PURE__*/function () {
+  function BoxUtils() {
+    box_utils_classCallCheck(this, BoxUtils);
+  }
+
+  box_utils_createClass(BoxUtils, null, [{
+    key: "BuildPrefixedFunctionName",
+    value:
+    /**
+     * Check if a value value is null or empty.
+     *
+     * @param { String } str the string to preform null or empty check on. 
+     */
+
+    /**
+     * Build a function name that uses a certain prefix.
+     *
+     * @param { String } prefix prefix string e.g. 'get'
+     * @param { String } variableName variable name e.g. 'name'
+     */
+    function BuildPrefixedFunctionName(prefix, variableName) {
+      var returnName = BoxUtils.CapitalizeFirstLetter(variableName);
+      returnName = "".concat(prefix).concat(returnName);
+      return returnName;
+    }
+    /**
+     * Build the setter name for a variable name.
+     *
+     * @param { String } variableName variable name.
+     */
+
+  }, {
+    key: "BuildSetterName",
+    value: function BuildSetterName(variableName) {
+      return BoxUtils.BuildPrefixedFunctionName('set', variableName);
+    }
+    /**
+     * Build the geter name for a variable name.
+     *
+     * @param { String } variableName variable name.
+     */
+
+  }, {
+    key: "BuildGetterName",
+    value: function BuildGetterName(variableName) {
+      return BoxUtils.BuildPrefixedFunctionName('get', variableName);
+    }
+    /**
+     * Capitalise the first letter in a string.
+     *
+     * @param { String } value string value.
+     * @returns { String } Capitalised string.
+     */
+
+  }, {
+    key: "CapitalizeFirstLetter",
+    value: function CapitalizeFirstLetter(value) {
+      if (value && value.length) {
+        var firstChar = value[0].toUpperCase();
+        return "".concat(firstChar).concat(value.substr(1, value.length));
+      }
+
+      return value;
+    }
+    /**
+     * Load JSON.
+     *
+     * @param { String } path json path.
+     * @returns { Promise<any> } Promise of JSON object.
+     */
+
+  }, {
+    key: "LoadJSON",
+    value: function LoadJSON(path) {
+      return new Promise(function (resolve) {
+        var request = new XMLHttpRequest();
+        request.overrideMimeType('application/json');
+        request.open('GET', path, true);
+
+        request.onreadystatechange = function () {
+          console.log('request args', request.readyState, request.status);
+
+          if (request.readyState === 4 && request.status === 200) {
+            resolve(JSON.parse(request.response));
+          }
+        };
+
+        request.send(null);
+      });
+    }
+    /**
+     * After a change is needed, re-use the box display function to re-set inner html.
+     *
+     * @param {*} box 
+     */
+
+  }, {
+    key: "DisplayBox",
+    value: function DisplayBox(box) {
+      if (box && typeof box.display === 'function') {
+        // Allows change detection to happen bottom up if a prent was set.
+        if (box._parentBox) {
+          box._parentBox.detectBoxChanges();
+        }
+
+        BoxUtils.LoadDOMAttributes(box);
+        var newMarkup = box.display(box);
+        box.innerHTML = newMarkup;
+
+        if (box._init && typeof box.boxOnRedisplayed === 'function') {
+          box.boxOnRedisplayed();
+        }
+      }
+    }
+    /**
+     * Build box interfaces (setters and getters) if _BoxInterface present.
+     *
+     * @param { any } box box. 
+     */
+
+  }, {
+    key: "BuildBoxInterfaces",
+    value: function BuildBoxInterfaces(box) {
+      if (box) {
+        var boxInterface = box.constructor._BoxInterface;
+
+        if (boxInterface) {
+          BoxUtils.BuildBoxInputs(box, boxInterface.Inputs || {});
+
+          if (boxInterface.Outputs) {
+            BoxUtils.BuildBoxOutputs(box, boxInterface.Outputs);
+          }
+        }
+      }
+    }
+    /**
+     * Build box inputs for a box.
+     *
+     * @param { any } inputsObject inputs object from _BoxInterface
+     */
+
+  }, {
+    key: "BuildBoxInputs",
+    value: function BuildBoxInputs(box, inputsObject) {
+      var inputsWithStockProperties = _objectSpread({
+        _parentBoxId: null
+      }, inputsObject);
+
+      Object.keys(inputsWithStockProperties).forEach(function (interfaceProp) {
+        var setterName = BoxUtils.BuildSetterName(interfaceProp);
+        var getterName = BoxUtils.BuildGetterName(interfaceProp);
+
+        box[setterName] = function (value) {
+          box[interfaceProp] = value;
+          box.detectBoxChanges();
+        };
+
+        box[getterName] = function () {
+          return box[interfaceProp];
+        };
+
+        if (inputsWithStockProperties[interfaceProp] !== null && typeof inputsWithStockProperties[interfaceProp] !== 'undefined') {
+          // If there is a value, set it (apply defaults...)
+          box[interfaceProp] = inputsWithStockProperties[interfaceProp];
+        }
+      });
+    }
+    /**
+     * Build output events for a box.
+     *
+     * @param { any } inputsObject 
+     */
+
+  }, {
+    key: "BuildBoxOutputs",
+    value: function BuildBoxOutputs(box, outputsObject) {
+      Object.keys(outputsObject).forEach(function (interfaceProp) {
+        var newBoxOutputEvent = new CustomEvent("(".concat(interfaceProp, ")"), {
+          detail: box
+        });
+        var eventBoxName = "_event_".concat(interfaceProp);
+        box[eventBoxName] = newBoxOutputEvent; // Add the dispatch function.
+
+        box[BoxUtils.BuildPrefixedFunctionName('dispatch', interfaceProp)] = function () {
+          box.dispatchEvent(box[eventBoxName]);
+        }; // Add the listen function.
+
+
+        box[BoxUtils.BuildPrefixedFunctionName('add', "".concat(interfaceProp, "Listener"))] = function (callback) {
+          box.addEventListener("(".concat(interfaceProp, ")"), callback, false);
+        }; // Add the remove listener function.
+
+
+        box[BoxUtils.BuildPrefixedFunctionName('remove', "".concat(interfaceProp, "Listener"))] = function () {
+          box.removeEventListener("(".concat(interfaceProp, ")"), callback);
+        };
+      });
+    }
+    /**
+     * Build the standard variables that go on boxes.
+     *
+     * @param { any } box box. 
+     */
+
+  }, {
+    key: "BuildBoxStandardVariables",
+    value: function BuildBoxStandardVariables(box) {
+      var contextPath = "SharedBoxCore.loadedBoxes.get('".concat(box._name, "').get('").concat(box._boxId, "')");
+      box._context = contextPath;
+    }
+    /**
+     * Load attributes from the DOM if they have been specified in the _BoxInterface!
+     * 
+     * @param { any } box box.
+     */
+
+  }, {
+    key: "LoadDOMAttributes",
+    value: function LoadDOMAttributes(box) {
+      if (box.attributes) {
+        var boxInterface = box.constructor._BoxInterface;
+
+        if (boxInterface) {
+          for (var i = 0; i < box.attributes.length; i++) {
+            var boxAttribute = box.attributes.item(i);
+            var attributeName = boxAttribute.name,
+                attributeValue = boxAttribute.value;
+            var trimmedName = BoxUtils.TrimFirstAndLastChar(attributeName);
+
+            if (BoxUtils.IsVariableInputProperty(attributeName) && boxInterface.Inputs && boxInterface.Inputs[trimmedName]) {
+              console.log('aa name', trimmedName); // NOTE: add extra logic here that somethow watches [] vars!
+
+              var setterName = BoxUtils.BuildSetterName(trimmedName);
+
+              if (typeof box[setterName] === 'function') {
+                box[trimmedName] = boxAttribute.value;
+              }
+            } else if (BoxUtils.IsOutputProperty(attributeName) && boxInterface.Outputs && boxInterface.Outputs[trimmedName]) {
+              (function () {
+                // Add the listener.
+                var functionName = BoxUtils.GetFunctionNameFromFunctionCallString(attributeValue);
+                var parentBox = box.getParentBox();
+                box.addEventListener(attributeName, function (ev) {
+                  return parentBox[functionName](ev);
+                });
+              })();
+            } else {
+              // Is normal stirng or number input property.
+              var _setterName = BoxUtils.BuildSetterName(attributeName);
+
+              console.log('aa found setter!', box[_setterName]);
+
+              if (typeof box[_setterName] === 'function') {
+                box[attributeName] = boxAttribute.value;
+                console.log('aa value set!', box[attributeName]);
+              }
+            }
+          }
+        }
+      }
+    }
+    /**
+     * Check if a property name is an input.
+     *
+     * @param { String } propertyName property name.
+     */
+
+  }, {
+    key: "IsVariableInputProperty",
+    value: function IsVariableInputProperty(propertyName) {
+      if (propertyName && propertyName.length) {
+        return propertyName.length > 2 && propertyName[0] === '[' && propertyName[propertyName.length - 1] === ']';
+      }
+    }
+  }, {
+    key: "GetFunctionNameFromFunctionCallString",
+    value: function GetFunctionNameFromFunctionCallString(functionCallString) {}
+    /**
+     * Check if a property name is an output.
+     *
+     * @param { String } propertyName property name.
+     */
+
+  }, {
+    key: "IsOutputProperty",
+    value: function IsOutputProperty(propertyName) {
+      if (propertyName && propertyName.length) {
+        return propertyName.length > 2 && propertyName[0] === '(' && propertyName[propertyName.length - 1] === ')';
+      }
+    }
+    /**
+     * Remove the first and last char of a string.
+     *
+     * @param { Stirng } propertyName property name.
+     */
+
+  }, {
+    key: "TrimFirstAndLastChar",
+    value: function TrimFirstAndLastChar(propertyName) {
+      var returnString = propertyName;
+
+      if (propertyName && propertyName.length > 2) {
+        returnString = returnString.slice(1, propertyName.length - 1);
+      }
+
+      return returnString;
+    }
+    /**
+     * Add box to the loaded boxes.
+     *
+     * @param { any } box box
+     */
+
+  }, {
+    key: "AddBoxToLoadedBoxes",
+    value: function AddBoxToLoadedBoxes(box) {
+      var boxConfig = box.constructor._BoxConfig;
+      var boxStore = HyperBoxCore.LoadedBoxes.get(boxConfig.name);
+
+      if (!boxStore) {
+        HyperBoxCore.LoadedBoxes.set(boxConfig.name, new Map());
+      }
+
+      HyperBoxCore.LoadedBoxes.get(boxConfig.name).set(box._boxId, box);
+    }
+  }]);
+
+  return BoxUtils;
+}();
+
+box_utils_defineProperty(box_utils_BoxUtils, "IsNullOrEmpty", function (value) {
+  if (typeof value === 'string') {
+    return !value.length;
+  }
+
+  if (_typeof(value) === 'object') {
+    return !Object.keys(value || {}).length;
+  }
+
+  return true;
+});
+;// CONCATENATED MODULE: ./src/box.js
+function box_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { box_typeof = function _typeof(obj) { return typeof obj; }; } else { box_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return box_typeof(obj); }
+
+function box_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function box_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function box_createClass(Constructor, protoProps, staticProps) { if (protoProps) box_defineProperties(Constructor.prototype, protoProps); if (staticProps) box_defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (box_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
+
+function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+
+var classImp = function classImp() {
+  return null;
+};
+/**
+ * @author Alessandro Alberga
+ * @description Describes the base structure of a box.
+ */
+
+
+if (typeof HTMLElement === 'function') {
+  classImp = /*#__PURE__*/function (_HTMLElement) {
+    _inherits(Box, _HTMLElement);
+
+    var _super = _createSuper(Box);
+
+    function Box() {
+      box_classCallCheck(this, Box);
+
+      return _super.call(this);
+    }
+    /**
+     * Initialise our special box!
+     */
+
+
+    box_createClass(Box, [{
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        var _this = this;
+
+        var boxConfig = this.constructor._BoxConfig;
+        this._boxId = HyperBoxCore.GetNewBoxId(boxConfig);
+        this.id = this._boxId;
+        this._name = boxConfig.name;
+        box_utils_BoxUtils.BuildBoxStandardVariables(this);
+        box_utils_BoxUtils.BuildBoxInterfaces(this);
+        box_utils_BoxUtils.DisplayBox(this);
+
+        this.detectBoxChanges = function () {
+          return box_utils_BoxUtils.DisplayBox(_this);
+        };
+
+        if (typeof this.boxOnDisplayed === 'function') this.boxOnDisplayed();
+        box_utils_BoxUtils.AddBoxToLoadedBoxes(this);
+        this._init = true;
+      }
+      /**
+       * Get the parent box from the parentBoxId set.
+       */
+
+    }, {
+      key: "getParentBox",
+      value: function getParentBox() {
+        return HyperBoxInnerCore.Document.getElementById(this._parentBoxId);
+      }
+      /**
+       * Allows any box to terminate itself.
+       */
+
+    }, {
+      key: "terminateSelf",
+      value: function terminateSelf() {
+        this._container.remove();
+
+        if (typeof this.boxOnDestroyed === 'function') this.boxOnDestroyed();
+      }
+      /**
+       * Get box element by id.
+       *
+       * @param { Number } id box id. 
+       */
+
+    }, {
+      key: "getBoxElementById",
+      value: function getBoxElementById(id) {
+        var element = HyperBoxInnerCore.Document.getElementById("".concat(this._boxId, "-").concat(id));
+        return element;
+      }
+      /**
+       * Box disconnected callback.
+       */
+
+    }, {
+      key: "disconnectedCallback",
+      value: function disconnectedCallback() {
+        if (typeof this.boxOnDestroyed === 'function') this.boxOnDestroyed();
+      }
+    }]);
+
+    return Box;
+  }( /*#__PURE__*/_wrapNativeSuper(HTMLElement));
+}
+
+var Box = classImp;
+;// CONCATENATED MODULE: ./src/box-loader.js
+function box_loader_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function box_loader_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/**
+ * @author Alessandro Alberga
+ * @description Box loader class.
+ */
+
+var box_loader_BoxLoader = function BoxLoader() {
+  box_loader_classCallCheck(this, BoxLoader);
+};
+
+box_loader_defineProperty(box_loader_BoxLoader, "LoadStylesheet", function (path) {
+  var link = HyperBoxInnerCore.Document.createElement('link');
+  link.type = 'text/css';
+  link.rel = 'stylesheet';
+  link.href = path;
+  HyperBoxInnerCore.Document.head.appendChild(link);
+});
+;// CONCATENATED MODULE: ./src/box-cluster/box-cluster.js
+function box_cluster_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function box_cluster_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+/**
+ * @author Alessandro Alberga
+ * @description Hyperbox BoxNode class.
+ */
+
+var BoxCluster = function BoxCluster(boxes) {
+  box_cluster_classCallCheck(this, BoxCluster);
+
+  box_cluster_defineProperty(this, "initBox", function (boxClass) {
+    if (boxClass._BoxConfig) {
+      var boxConfig = boxClass._BoxConfig;
+
+      if (boxConfig) {
+        if (boxConfig.styleSheetPath) box_loader_BoxLoader.LoadStylesheet(boxConfig.styleSheetPath);
+        HyperBoxInnerCore.Window.customElements.define(boxConfig.name, boxClass);
+        console.log("HyperBox-JS: Defined: \"".concat(boxConfig.name, "\""));
+      }
+    } else {
+      throw new Error("HyperBox-JS: _BoxConfig not present on: \"".concat(boxClass, "\""));
+    }
+  });
+
+  if (boxes && boxes.length) {
+    boxes.forEach(this.initBox);
+  }
+};
+;// CONCATENATED MODULE: ./src/logging/console-colours.js
+var consoleColours = {
+  Reset: "\x1b[0m",
+  Bright: "\x1b[1m",
+  Dim: "\x1b[2m",
+  Underscore: "\x1b[4m",
+  Blink: "\x1b[5m",
+  Reverse: "\x1b[7m",
+  Hidden: "\x1b[8m",
+  FgBlack: "\x1b[30m",
+  FgRed: "\x1b[31m",
+  FgGreen: "\x1b[32m",
+  FgYellow: "\x1b[33m",
+  FgBlue: "\x1b[34m",
+  FgMagenta: "\x1b[35m",
+  FgCyan: "\x1b[36m",
+  FgWhite: "\x1b[37m",
+  BgBlack: "\x1b[40m",
+  BgRed: "\x1b[41m",
+  BgGreen: "\x1b[42m",
+  BgYellow: "\x1b[43m",
+  BgBlue: "\x1b[44m",
+  BgMagenta: "\x1b[45m",
+  BgCyan: "\x1b[46m",
+  BgWhite: "\x1b[47m"
+};
+;// CONCATENATED MODULE: ./src/logging/log-utils.js
+
+var LoggingUtils = {
+  logGreen: function logGreen(str) {
+    return console.log("".concat(consoleColours.FgGreen).concat(str).concat(consoleColours.Reset));
+  },
+  logYellow: function logYellow(str) {
+    return console.log("".concat(consoleColours.FgYellow).concat(str).concat(consoleColours.Reset));
+  },
+  logBlue: function logBlue(str) {
+    return console.log("".concat(consoleColours.FgCyan).concat(str).concat(consoleColours.Reset));
+  },
+  logLoader: function logLoader() {
+    return function () {
+      var p = ['/', '-', '\\', '|'];
+      var x = 0;
+      var interval = setInterval(function () {
+        process.stdout.write("\r" + consoleColours.FgBlue + p[x++] + "".concat(consoleColours.Reset, " "));
+        x &= p.length - 1;
+      }, 250);
+
+      var clearLine = function clearLine() {
+        return process.stdout.write("\r");
+      };
+
+      return function () {
+        clearInterval(interval);
+        clearLine();
+      };
+    }();
+  }
+};
+;// CONCATENATED MODULE: ./src/start-box-server.js
+
+
+var startBoxServer = function startBoxServer(dir) {};
+
+if (typeof require === 'function') {
+  var express = require('express');
+
+  var favicon = require('express-favicon');
+
+  var path = require('path');
+
+  var port = process.env.PORT || 2021;
+
+  startBoxServer = function startBoxServer(dir) {
+    var app = express();
+    var pubDir = dir + '/public';
+    var distDir = dir + '/dist';
+    LoggingUtils.logBlue('HyperBox: starting up application...');
+    var clearLoader = LoggingUtils.logLoader();
+    app.use(favicon(pubDir + '/favicon.ico'));
+    app.use(express["static"](distDir)); // send the user to index html page inspite of the url
+
+    app.get('*', function (req, res) {
+      res.sendFile(path.resolve(distDir, 'index.html'));
+    });
+    app.listen(port, function () {
+      clearLoader();
+      LoggingUtils.logGreen("HyperBox: application running on port ".concat(port, " \uD83D\uDE80"));
+    });
+  };
+}
+
+
+;// CONCATENATED MODULE: ./src/index.js
+
+
+
+
+
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
+});
 //# sourceMappingURL=hyperbox-js.js.map

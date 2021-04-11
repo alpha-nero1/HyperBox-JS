@@ -1,9 +1,10 @@
 {
   "name": "hyperbox-js",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "A JavaScript UI framework",
-  "main": "dist/hyperbox-js.js",
+  "main": "./dist/hyperbox-js.js",
   "type": "module",
+  "module": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,7 +14,7 @@
     "JavaScript",
     "framework"
   ],
-  "author": "",
+  "author": "Alessandro Alberga",
   "license": "ISC",
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "url": "https://github.com/alpha-nero1/BoxJS/issues"
   },
   "dependencies": {
+    "circular-dependency-plugin": "^5.2.2",
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
     "path": "^0.12.7"

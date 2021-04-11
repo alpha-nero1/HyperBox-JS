@@ -1,8 +1,10 @@
+import { Box } from '../../box';
+
 /**
  * @author Alessandro Alberga
  * @description Dialog box implementation.
  */
-class DialogBox extends Box {
+export class DialogBox extends Box {
 
   static _BoxConfig = {
     name: 'DialogBox',
