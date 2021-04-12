@@ -1,5 +1,5 @@
-import { DialogService } from './core-services/dialog/dialog.service';
-import { HttpService } from './core-services/http/http.service';
+import { DialogService } from './core-services/dialog/dialog.service.js';
+import { HttpService } from './core-services/http/http.service.js';
 
 /**
  * @author Alessandro Alberga

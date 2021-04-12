@@ -1,5 +1,5 @@
-import { BoxUtils } from './box-utils';
-import { HyperBoxCore } from './hyperbox-core';
+import { BoxUtils } from './box-utils.js';
+import { HyperBoxCore } from './hyperbox-core.js';
 
 let classImp = () => null;
 

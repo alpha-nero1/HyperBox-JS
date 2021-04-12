@@ -12,7 +12,7 @@ module.exports = {
   mode: 'production',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: `${filename}.js`,
+    filename: 'index.js',
     library: {
       name: 'hyperbox-js',
       type: 'umd'
@@ -49,6 +49,7 @@ module.exports = {
       {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
+        include: __dirname + "/src",
         resolve: {
           fullySpecified: false
         },

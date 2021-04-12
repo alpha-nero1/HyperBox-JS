@@ -1,17 +1,63 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
+		module.exports = factory(require("express"), require("express-favicon"), require("path"));
 	else if(typeof define === 'function' && define.amd)
-		define([], factory);
+		define(["express", "express-favicon", "path"], factory);
 	else if(typeof exports === 'object')
-		exports["hyperbox-js"] = factory();
+		exports["hyperbox-js"] = factory(require("express"), require("express-favicon"), require("path"));
 	else
-		root["hyperbox-js"] = factory();
-})(this, function() {
+		root["hyperbox-js"] = factory(root["express"], root["express-favicon"], root["path"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE__391__, __WEBPACK_EXTERNAL_MODULE__880__, __WEBPACK_EXTERNAL_MODULE__549__) {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-/******/ 	// The require scope
-/******/ 	var __webpack_require__ = {};
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 391:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__391__;
+
+/***/ }),
+
+/***/ 880:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__880__;
+
+/***/ }),
+
+/***/ 549:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__549__;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
@@ -44,6 +90,8 @@ return /******/ (() => { // webpackBootstrap
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
@@ -785,47 +833,70 @@ var consoleColours = {
 };
 ;// CONCATENATED MODULE: ./src/logging/log-utils.js
 
-var LoggingUtils = {
+var exportUtils = {
   logGreen: function logGreen(str) {
-    return console.log("".concat(consoleColours.FgGreen).concat(str).concat(consoleColours.Reset));
+    return null;
   },
   logYellow: function logYellow(str) {
-    return console.log("".concat(consoleColours.FgYellow).concat(str).concat(consoleColours.Reset));
+    return null;
   },
   logBlue: function logBlue(str) {
-    return console.log("".concat(consoleColours.FgCyan).concat(str).concat(consoleColours.Reset));
+    return null;
   },
   logLoader: function logLoader() {
     return function () {
-      var p = ['/', '-', '\\', '|'];
-      var x = 0;
-      var interval = setInterval(function () {
-        process.stdout.write("\r" + consoleColours.FgBlue + p[x++] + "".concat(consoleColours.Reset, " "));
-        x &= p.length - 1;
-      }, 250);
-
-      var clearLine = function clearLine() {
-        return process.stdout.write("\r");
-      };
-
       return function () {
-        clearInterval(interval);
-        clearLine();
+        return null;
       };
     }();
   }
 };
+
+if (typeof process !== 'undefined') {
+  exportUtils = {
+    logGreen: function logGreen(str) {
+      return console.log("".concat(consoleColours.FgGreen).concat(str).concat(consoleColours.Reset));
+    },
+    logYellow: function logYellow(str) {
+      return console.log("".concat(consoleColours.FgYellow).concat(str).concat(consoleColours.Reset));
+    },
+    logBlue: function logBlue(str) {
+      return console.log("".concat(consoleColours.FgCyan).concat(str).concat(consoleColours.Reset));
+    },
+    logLoader: function logLoader() {
+      return function () {
+        var p = ['/', '-', '\\', '|'];
+        var x = 0;
+        var interval = setInterval(function () {
+          process.stdout.write("\r" + consoleColours.FgBlue + p[x++] + "".concat(consoleColours.Reset, " "));
+          x &= p.length - 1;
+        }, 250);
+
+        var clearLine = function clearLine() {
+          return process.stdout.write("\r");
+        };
+
+        return function () {
+          clearInterval(interval);
+          clearLine();
+        };
+      }();
+    }
+  };
+}
+
+var LoggingUtils = exportUtils;
 ;// CONCATENATED MODULE: ./src/start-box-server.js
 
 
 var startBoxServer = function startBoxServer(dir) {};
 
-if (typeof require === 'function') {
-  var express = require('express');
+if ( true && typeof process !== 'undefined') {
+  var express = __webpack_require__(391);
 
-  var favicon = require('express-favicon');
+  var favicon = __webpack_require__(880);
 
-  var path = require('path');
+  var path = __webpack_require__(549);
 
   var port = process.env.PORT || 2021;
 
@@ -854,8 +925,10 @@ if (typeof require === 'function') {
 
 
 
+})();
+
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;
 });
-//# sourceMappingURL=hyperbox-js.js.map
+//# sourceMappingURL=index.js.map

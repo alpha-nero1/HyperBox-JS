@@ -1,8 +1,8 @@
-import { LoggingUtils } from './logging/log-utils';
+import { LoggingUtils } from './logging/log-utils.js';
 
 let startBoxServer = (dir) => {}
 
-if (typeof require === 'function') {
+if (typeof require !== 'undefined' && typeof process !== 'undefined') {
   const express = require('express');
   const favicon = require('express-favicon');
   const path = require('path');

@@ -1,4 +1,4 @@
-import { Box } from '../../box';
+import { Box } from '../../box.js';
 
 /**
  * @author Alessandro Alberga

@@ -1,4 +1,4 @@
-import { HyperBoxCore } from './hyperbox-core';
+import { HyperBoxCore } from './hyperbox-core.js';
 
 /**
  * @author Alessandro Alberga

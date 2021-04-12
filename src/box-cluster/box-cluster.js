@@ -1,4 +1,4 @@
-import { BoxLoader } from '../box-loader';
+import { BoxLoader } from '../box-loader.js';
 
 let classImp = () => null;
 
