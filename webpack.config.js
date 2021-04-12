@@ -20,8 +20,7 @@ module.exports = {
     globalObject: 'this'
   },
   resolve: {
-    extensions: [".js"],
-    modules: [path.join(__dirname, "src"), "node_modules"]
+    extensions: [".js"]
   },
   devtool: 'source-map',
   externals: {
