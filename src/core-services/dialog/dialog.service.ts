@@ -1,4 +1,4 @@
-import { HyperBoxCore } from '../..'
+import { HyperBoxCore } from '../../hyperbox-core';
 
 /**
  * @author Alessandro Alberga

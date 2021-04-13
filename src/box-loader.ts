@@ -1,4 +1,4 @@
-let classImp = () => null;
+let classImp: any = () => null;
 
 /**
  * @author Alessandro Alberga
@@ -13,11 +13,11 @@ if (typeof document !== 'undefined') {
      * @param { String } path sheet path.
      */
     static LoadStylesheet = (path) => {
-      const link = HyperBoxInnerCore.Document.createElement('link');
+      const link = document.createElement('link');
       link.type = 'text/css';
       link.rel = 'stylesheet';
       link.href = path;
-      HyperBoxInnerCore.Document.head.appendChild(link);
+      document.head.appendChild(link);
     }
   }
 }

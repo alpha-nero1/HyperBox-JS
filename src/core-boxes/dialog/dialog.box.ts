@@ -1,4 +1,5 @@
 import { Box } from '../../box.js';
+import { HyperBoxCore } from '../../hyperbox-core';
 
 /**
  * @author Alessandro Alberga
@@ -15,6 +16,12 @@ export class DialogBox extends Box {
     _dialogContext: {}
   }
 
+  private innerBox?: Box;
+
+  private _dialogContext?: any;
+
+
+
   constructor() {
     super();
   }
@@ -29,9 +36,9 @@ export class DialogBox extends Box {
    */
   insertDialogInnerBox(boxClassName, argumentsObject, onSuccess, onError) {
     // We can make our dynamic box by calling make and chaining it with set parent call.
-    this.innerBox = SharedBoxCore.makeBox(boxClassName, this._boxId);
-    this.set_dialogContext({ ...argumentsObject });
-    this.innerBox._dialogContext = {
+    this.innerBox = HyperBoxCore.MakeBox(boxClassName, this._boxId);
+    (this as any).set_dialogContext({ ...argumentsObject });
+    (this.innerBox as any)._dialogContext = {
       closeOnSuccess: (...args) => {
         this.innerBox.terminateSelf();
         this.terminateSelf();
@@ -46,8 +53,8 @@ export class DialogBox extends Box {
         ...argumentsObject
       }
     }
-    if (typeof this.innerBox.boxOnNavigatedTo === 'function') {
-      this.innerBox.boxOnNavigatedTo();
+    if (typeof (this.innerBox as any).boxOnNavigatedTo === 'function') {
+      (this.innerBox as any).boxOnNavigatedTo();
     }
   }
 
@@ -109,7 +116,7 @@ export class DialogBox extends Box {
    */
   underlayOnClicked() {
     if (this.innerBox && this._dialogContext.closeable) {
-      this.innerBox._dialogContext.closeOnSuccess(true)
+      (this.innerBox as any)._dialogContext.closeOnSuccess(true)
     }
   }
 

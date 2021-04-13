@@ -6,6 +6,9 @@ import { HttpService } from './core-services/http/http.service.js';
  * @description Box core api.
  */
 export class HyperBoxCoreAPI {
+  public dialogService: DialogService;
+  public httpService: HttpService;
+
   constructor() {
     this.intiDependencies()
   }

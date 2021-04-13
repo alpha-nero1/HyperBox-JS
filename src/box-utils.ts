@@ -1,5 +1,3 @@
-import { HyperBoxCore } from './hyperbox-core.js';
-
 /**
  * @author Alessandro Alberga
  * @description Box utils.
@@ -168,12 +166,14 @@ export class BoxUtils {
         box.dispatchEvent(box[eventBoxName])
       }
       // Add the listen function.
+      let setCallback = () => {};
       box[BoxUtils.BuildPrefixedFunctionName('add', `${interfaceProp}Listener`)] = (callback) => {
-        box.addEventListener(`(${interfaceProp})`, callback, false);
+        setCallback = callback;
+        box.addEventListener(`(${interfaceProp})`, setCallback, false);
       }
       // Add the remove listener function.
       box[BoxUtils.BuildPrefixedFunctionName('remove', `${interfaceProp}Listener`)] = () => {
-        box.removeEventListener(`(${interfaceProp})`, callback);
+        box.removeEventListener(`(${interfaceProp})`, setCallback);
       }
     });
   }
@@ -240,8 +240,8 @@ export class BoxUtils {
     }
   }
 
-  static GetFunctionNameFromFunctionCallString(functionCallString) {
-
+  static GetFunctionNameFromFunctionCallString(functionCallString): string {
+    return functionCallString;
   }
 
   /**
@@ -270,22 +270,5 @@ export class BoxUtils {
       returnString = returnString.slice(1, (propertyName.length - 1))
     }
     return returnString;
-  }
-
-  /**
-   * Add box to the loaded boxes.
-   *
-   * @param { any } box box
-   */
-  static AddBoxToLoadedBoxes(box) {
-    const boxConfig = box.constructor._BoxConfig;
-    const boxStore = HyperBoxCore.LoadedBoxes.get(boxConfig.name);
-    if (!boxStore) {
-      HyperBoxCore.LoadedBoxes.set(
-        boxConfig.name, 
-        new Map()
-      )
-    }
-    HyperBoxCore.LoadedBoxes.get(boxConfig.name).set(box._boxId, box);
   }
 }

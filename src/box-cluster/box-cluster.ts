@@ -1,6 +1,6 @@
-import { BoxLoader } from '../box-loader.js';
+import { BoxLoader } from '../box-loader';
 
-let classImp = () => null;
+let classImp: any = () => null;
 
 /**
  * @author Alessandro Alberga

@@ -1,4 +1,4 @@
-import { consoleColours } from './console-colours.js';
+import { consoleColours } from './console-colours';
 
 let exportUtils = {
   logGreen: (str) => null,

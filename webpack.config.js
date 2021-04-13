@@ -1,10 +1,9 @@
 const path = require('path');
 const package = require('./package.json');
-const filename = package.name;
 
 module.exports = {
   entry: {
-    index: './src/index.js'
+    index: './src/index.ts'
   },
   optimization: {
     minimize: false
@@ -20,10 +19,10 @@ module.exports = {
     globalObject: 'this'
   },
   resolve: {
-    extensions: [".js"],
+    extensions: ['.js', '.ts'],
     modules: [path.join(__dirname, "src"), "node_modules"]
   },
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   externals: {
     'express-favicon': {
       commonjs: 'express-favicon',
@@ -47,19 +46,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
-        include: __dirname + "/src",
-        resolve: {
-          fullySpecified: false
-        },
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-proposal-class-properties']
-          }
-        }
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       }
     ]
   }

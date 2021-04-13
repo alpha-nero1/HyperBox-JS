@@ -1,8 +1,9 @@
 {
   "name": "hyperbox-js",
-  "version": "1.0.18",
+  "version": "1.0.25",
   "description": "A JavaScript UI framework",
   "main": "index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepack": "npx webpack"
@@ -31,6 +32,8 @@
     "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",
     "babel-loader": "^8.2.2",
+    "ts-loader": "^8.1.0",
+    "typescript": "^4.2.4",
     "webpack": "^5.30.0",
     "webpack-cli": "^4.6.0"
   }

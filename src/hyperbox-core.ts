@@ -1,4 +1,7 @@
-let classImp = () => null;
+import { BoxLoader } from './box-loader';
+import { BoxUtils } from './box-utils';
+
+let classImp: any = () => null;
 
 /**
  * @author Alessandro Alberga
@@ -25,6 +28,23 @@ if (typeof document !== 'undefined') {
     }
 
     /**
+   * Add box to the loaded boxes.
+   *
+   * @param { any } box box
+   */
+  static AddBoxToLoadedBoxes(box) {
+    const boxConfig = box.constructor._BoxConfig;
+    const boxStore = HyperBoxCore.LoadedBoxes.get(boxConfig.name);
+    if (!boxStore) {
+      HyperBoxCore.LoadedBoxes.set(
+        boxConfig.name, 
+        new Map()
+      )
+    }
+    HyperBoxCore.LoadedBoxes.get(boxConfig.name).set(box._boxId, box);
+  }
+
+    /**
      * Kick off the boxes...
      */
     static Init = () => {
@@ -37,9 +57,9 @@ if (typeof document !== 'undefined') {
      *
      * @param { any } boxName name of box.
      */
-    BoxInstanceFactory = (boxClassName) => {
+    static BoxInstanceFactory = (boxClassName) => {
       const boxCapitalisedName = BoxUtils.CapitalizeFirstLetter(boxClassName);
-      const instance = new (this.BoxRegistry.get(boxCapitalisedName))()
+      const instance = new (HyperBoxCore.BoxRegistry.get(boxCapitalisedName))()
       return instance;
     }
     
@@ -48,7 +68,7 @@ if (typeof document !== 'undefined') {
      *
      * @param { any } box box.
      */
-    CreateBoxContainer = (box) => {
+    static CreateBoxContainer = (box) => {
       const boxConfig = box.constructor._BoxConfig;
       const boxContainer = document.createElement('div');
       boxContainer.setAttribute('id', box._boxId);
@@ -79,11 +99,11 @@ if (typeof document !== 'undefined') {
     static AddBoxToDOM = (box, parentBoxId) => {
       const boxParent = document.getElementById(parentBoxId);
       const boxConfig = box.constructor._BoxConfig;
-      const newBoxId = this.GetNewBoxId(boxConfig);
+      const newBoxId = HyperBoxCore.GetNewBoxId(boxConfig);
       box._boxId = newBoxId;
       box._name = boxConfig.name;
       // Add box to loaded boxes.
-      BoxUtils.AddBoxToLoadedBoxes(box);
+      HyperBoxCore.AddBoxToLoadedBoxes(box);
       BoxUtils.BuildBoxInterfaces(box);
       BoxUtils.BuildBoxStandardVariables(box);
       // Setup styles.
@@ -91,7 +111,7 @@ if (typeof document !== 'undefined') {
         BoxLoader.LoadStylesheet(boxConfig.styleSheetPath);
       }
       // Setup the box container.
-      const boxContainer = this.CreateBoxContainer(box)
+      const boxContainer = HyperBoxCore.CreateBoxContainer(box)
       // Set retaining values.
       box._container = boxContainer;
       // Setup the initial markup and add box to parent!
@@ -121,10 +141,10 @@ if (typeof document !== 'undefined') {
      * @param {*} parentBoxId 
      */
     static MakeBox = (className, parentBoxId) => {
-      const box = this.BoxInstanceFactory(className);
+      const box = HyperBoxCore.BoxInstanceFactory(className);
       box._className = className;
       box._parentBoxId = parentBoxId;
-      return this.AddBoxToDOM(box, parentBoxId);  
+      return HyperBoxCore.AddBoxToDOM(box, parentBoxId);  
     }
   }
 }

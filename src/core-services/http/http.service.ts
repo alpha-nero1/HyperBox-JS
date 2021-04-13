@@ -34,8 +34,8 @@ export class HttpService {
       if (opts) {
         if (opts.headers) {
           if (opts.requestHeadersObject && typeof opts.requestHeadersObject === 'object') {
-            Object.entries(requestHeadersObject).forEach(header => {
-              request.setRequestHeader(header[0], header[1])
+            Object.entries(opts.requestHeadersObject).forEach(header => {
+              request.setRequestHeader(header[0], header[1] as string)
             })
           }
         }

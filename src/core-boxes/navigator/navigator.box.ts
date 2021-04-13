@@ -1,4 +1,5 @@
-import { Box } from '../../box.js';
+import { Box } from '../../box';
+import { HyperBoxCore } from '../../hyperbox-core';
 
 /**
  * @author Alessandro Alberga
@@ -16,6 +17,10 @@ export class NavigatorBox extends Box {
     }
   }
 
+  protected _routes: any;
+  protected _loadedRoutes = new Map();
+  protected _currentBox?: Box;
+
   constructor() { 
     super();
   }
@@ -24,7 +29,6 @@ export class NavigatorBox extends Box {
    * Connect the navigator to the parent box.
    */
   boxOnDisplayed = () => {
-    console.log('aa nav box', this)
     this.dispatchNavigatorOnLoaded();
   }
 
@@ -46,9 +50,9 @@ export class NavigatorBox extends Box {
    * Cleanup an old box.
    */
   cleanupOldBox() {
-    if (this.currentBox) {
-      if (typeof this.currentBox.boxOnDestroyed === 'function') {
-        this.currentBox.boxOnDestroyed();
+    if (this._currentBox) {
+      if (typeof (this._currentBox as any).boxOnDestroyed === 'function') {
+        (this._currentBox as any).boxOnDestroyed();
       }
       this.setCurrentBox(null);
     }
@@ -61,21 +65,21 @@ export class NavigatorBox extends Box {
    */
   addArgumentsToCurrentBox(argumentsObject) {
     if (
-      this.currentBox && 
+      this._currentBox && 
       argumentsObject && 
       typeof argumentsObject === 'object'
     ) {
-      this.currentBox._routeContext = argumentsObject;
+      (this._currentBox as any)._routeContext = argumentsObject;
     }
-    this.currentBox.detectBoxChanges();
+    (this._currentBox as any).detectBoxChanges();
   }
 
   /**
    * Get the rendered current box.
    */
   getCurrentBox() {
-    if (this.currentBox) {
-      return this.currentBox.display(this.currentBox);
+    if (this._currentBox) {
+      return this._currentBox.display(this._currentBox);
     }
     return '';
   }
@@ -86,7 +90,7 @@ export class NavigatorBox extends Box {
    * @param { any } box box. 
    */
   setCurrentBox(box) {
-    this.currentBox = box;
+    this._currentBox = box;
     this.innerHTML = this.getCurrentBox();
   }
 
@@ -106,7 +110,7 @@ export class NavigatorBox extends Box {
       if (this._loadedRoutes && this._loadedRoutes.get(routeName)) {
         boxToGoto = this._loadedRoutes.get(routeName);
       } else {
-        boxToGoto = SharedBoxCore.makeBox(boxClassName, this._boxId);
+        boxToGoto = HyperBoxCore.MakeBox(boxClassName, this._boxId);
         if (this._loadedRoutes) {
           this._loadedRoutes.set(routeName, boxToGoto)
         }
@@ -115,13 +119,15 @@ export class NavigatorBox extends Box {
       this.setCurrentBox(boxToGoto);
       // Set the args.
       this.addArgumentsToCurrentBox(argumentsObject);
-      if (typeof this.currentBox.boxOnNavigatedTo === 'function') {
-        this.currentBox.boxOnNavigatedTo();
+      if (typeof (this._currentBox as any).boxOnNavigatedTo === 'function') {
+        (this._currentBox as any).boxOnNavigatedTo();
       }
     } else {
       throw new Error(`BoxJS: Could not find route "${routeName}"`);
     }
   }
+
+  private dispatchNavigatorOnLoaded = () => null;
 
   display = () => `${this.getCurrentBox()}`;
 }

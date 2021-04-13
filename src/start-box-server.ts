@@ -1,4 +1,4 @@
-import { LoggingUtils } from './logging/log-utils.js';
+import { LoggingUtils } from './logging/log-utils';
 
 let startBoxServer = (dir) => {}
 
