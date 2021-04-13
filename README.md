@@ -2,6 +2,8 @@
 
 HyperBox-JS is a simple alternative to Angular, React and Vue. They are the inspiration for this project.
 
+Despite the name hyperbox is written in TypeScript!
+
 You can easily get started by installing the CLI:
 - `npm i -g hyperbox-js-cli`
 Then using the CLI you can spin up your own HyperBox-JS project with:
@@ -12,6 +14,8 @@ Then using the CLI you can spin up your own HyperBox-JS project with:
 ## Links
 - Link to hyperbox-js-cli: https://www.npmjs.com/package/hyperbox-js-cli
 - Link to code repository: https://github.com/alpha-nero1/HyperBox-JS
+
+&nbsp;
 
 # Box 📦
 
@@ -26,10 +30,10 @@ So, what does a box look like.
 As of the current alpha version of HyperBox-JS, A simple box looks like this:
 
 ```
-class ExampleBox extends Box {
+export class ExampleBox extends Box {
 
   static _BoxConfig = {
-    name: 'ExampleBox'
+    name: 'example-box'
   }
 
   constructor() {
@@ -62,13 +66,13 @@ The _BoxConfig tells BoxCore how creation of the box should be configured. what 
 
 ```
   <div>
-    <ExampleBox>
+    <example-box>
       <!-- You will see markup you specified in display function end up here!  -->
-    </ExampleBox>
+    </example-box>
   </div>
 ```
 
-The convention here is to suffix the names with `Box` but you could always get away with not doing so (but why would you ;))
+The convention here is to suffix the names with `box` but you could always get away with not doing so (but why would you 😉))
 
 &nbsp;
 
@@ -94,7 +98,7 @@ Here is where configurability comes in to play. If we would like to configure ou
 class ExampleBox extends Box {
 
   static _BoxConfig = {
-    name: 'ExampleBox',
+    name: 'example-box',
     styleSheetPath: './app/example/example.box.css'
   }
 
@@ -119,7 +123,7 @@ Another thing the box interface enables is the **interface** of variables settab
 
 
 ```
-<ExampleBox name="Ashoka Tano" boxClass="show-dual-weilding-sabers"></ExampleBox>
+<example-box name="Ashoka Tano" boxClass="show-dual-weilding-sabers"></example-box>
 ```
 
 Those properties will then be available on the instance and the box can react accordingly.
@@ -132,7 +136,7 @@ To use the navigator box and have easy navigation in your app here are the steps
   1. Implement the markup.
 
   ```
-    <NavigatorBox navigationController="${this._boxId}"></NavigatorBox>
+    <navigator-box navigationController="${this._boxId}"></navigator-box>
   ```
 
   The box navigator requires that you specify the `navigationController` this is simply the current `_boxId` of the parent controller.
@@ -163,3 +167,29 @@ To use the navigator box and have easy navigation in your app here are the steps
 
   @param route = the string that identifies the route to go to.
   @param opts = the properties (and by extension, values) that have setters on the box navigating to. Those setters are executed storing the value in the desired box.
+
+# Box Clusters
+What is a box cluster? A box cluster is a class that allows us to register the boxes we make so that they are available in the DOM. They provide us a way to group boxes together.
+
+## So how can I use them?
+Once you start up your project you will have a good example of how it is used.
+You should see something of the like in your `src/index.js`:
+
+&nbsp;
+
+```
+import { BoxCluster } from 'hyperbox-js';
+import { HyperBoxCore } from 'hyperbox-js';
+import { MainBox } from './main/main.box';
+
+// Create your first cluster...
+const cluster = new BoxCluster([
+  MainBox
+])
+// Initialise the application...
+HyperBoxCore.Init();
+```
+
+&nbsp;
+
+As you can see, all you need to do is provide a BoxCluster that you create with an array of `Box` classes and you can start using those boxes in your applications markup! 🚀
