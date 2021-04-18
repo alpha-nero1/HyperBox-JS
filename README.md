@@ -30,6 +30,10 @@ So, what does a box look like.
 As of the current alpha version of HyperBox-JS, A simple box looks like this:
 
 ```
+import { Box } from 'hyperbox-js';
+// Import your .less file along with the box!!
+import './main.box.less';
+
 export class ExampleBox extends Box {
 
   static _BoxConfig = {
@@ -76,19 +80,6 @@ The convention here is to suffix the names with `box` but you could always get a
 
 &nbsp;
 
-Aditionally, we can also specify a `styleSheetPath` like:
-
-```
-  static _BoxConfig = {
-    name: 'ExampleBox',
-    styleSheetPath: './app/example/example.box.css'
-  }
-```
-
-Which will load css that you would like to associate with that box.
-
-&nbsp;
-
 ## The _BoxInterface
 
 Here is where configurability comes in to play. The `_BoxInterface` allows us to specify 3 key things:
@@ -98,12 +89,14 @@ Here is where configurability comes in to play. The `_BoxInterface` allows us to
 
 
 ```
+import { Box } from 'hyperbox-js';
+// Import your .less file along with the box!!
+import './main.box.less';
 
 class ExampleBox extends Box {
 
   static _BoxConfig = {
     name: 'example-box',
-    styleSheetPath: './app/example/example.box.css'
   }
 
   static _BoxInterface = {

@@ -1,4 +1,3 @@
-import { Box } from "./box";
 /**
  * @author Alessandro Alberga
  * @description Box utils.
@@ -10,7 +9,7 @@ export declare class BoxUtils {
      * @param { String } str the string to preform null or empty check on.
      */
     static IsNullOrEmpty: (value: any) => boolean;
-    static CheckBoxRequirements(box: Box): void;
+    static CheckBoxRequirements(box: any): void;
     /**
      * Build a function name that uses a certain prefix.
      *
