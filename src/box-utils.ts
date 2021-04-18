@@ -1,4 +1,3 @@
-import { Box } from "./box";
 import { BoxInterface } from "./types";
 
 /**

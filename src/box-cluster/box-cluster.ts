@@ -1,5 +1,3 @@
-import { BoxLoader } from '../box-loader';
-
 let classImp: any = () => null;
 
 /**
@@ -18,7 +16,6 @@ if (typeof window !== 'undefined') {
       if (boxClass._BoxConfig) {
         const { _BoxConfig: boxConfig } = boxClass;
         if (boxConfig) {
-          if (boxConfig.styleSheetPath) BoxLoader.LoadStylesheet(boxConfig.styleSheetPath);
           window.customElements.define(boxConfig.name, boxClass)
           console.log(`HyperBox-JS: Defined: "${boxConfig.name}"`)
         }

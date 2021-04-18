@@ -1,4 +1,3 @@
-import { BoxLoader } from './box-loader';
 import { BoxUtils } from './box-utils';
 
 let classImp: any = () => null;
@@ -107,10 +106,6 @@ if (typeof document !== 'undefined') {
       HyperBoxCore.AddBoxToLoadedBoxes(box);
       BoxUtils.BuildBoxInterfaces(box);
       BoxUtils.BuildBoxStandardVariables(box);
-      // Setup styles.
-      if (boxConfig.styleSheetPath) {
-        BoxLoader.LoadStylesheet(boxConfig.styleSheetPath);
-      }
       // Setup the box container.
       const boxContainer = HyperBoxCore.CreateBoxContainer(box)
       // Set retaining values.

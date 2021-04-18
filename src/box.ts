@@ -19,8 +19,6 @@ export class Box extends HtmlClass {
   protected _container?: HTMLElement;
   protected _parentBoxId?: string;
   protected _context?: any;
-  protected boxOnDisplayed: () => void;
-  protected boxOnDestroyed: () => void;
   public display: (context: any) => string;
   static _BoxConfig?: BoxConfig;
   static _BoxInterface: BoxInterface;
