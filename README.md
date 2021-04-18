@@ -91,7 +91,11 @@ Which will load css that you would like to associate with that box.
 
 ## The _BoxInterface
 
-Here is where configurability comes in to play. If we would like to configure our ExampleBox to take and store a variable that we would like to then act upon, we could specify the `_BoxInterface` like so:
+Here is where configurability comes in to play. The `_BoxInterface` allows us to specify 3 key things:
+1. The inputs of the box.
+2. The vars inside the box where change detection is important.
+3. The outputs of the box.
+
 
 ```
 
@@ -106,6 +110,9 @@ class ExampleBox extends Box {
     Inputs: {
       name: 'Default value...',
       boxClass: 'spin-clockwise'
+    },  
+    Vars: {
+      isTurnedOn: false
     },
     Outputs: {
       onFirstSpin: null
@@ -117,13 +124,22 @@ class ExampleBox extends Box {
 
 ```
 
-The _BoxInterface allows for several things, firstly when detected on a `Box`, `BoxCore` creates and builds corresponding setters and getters for those variables, so, on an instance of ExampleBox we now would have methods `getName()`, `setName()`, `getBoxClass()` and `setBoxClass()` available to us. This allows us to change values on the box (or get) and also run change detection meaning a value change for name from 'Perry' to 'Platipus' would be seen in the DOM.
+For our three examples this is what HyperBoxCore does to a box that would specify such an interface:
+1. Create getters and setters for the `Inputs`. e.g. `getName()`, `setName()`, `getBoxClass()`, `setBoxClass()`.
+2. Create getters and setters for the `Vars`. e.g. `getIsTurnedOn()` and `setIsTurnedOn()`.
+3. Create output dispatch  and listener functions on the box e.g. `dispatchOnFirstSpin()`, `addOnFirstSpinListener()` and `removeOnFirstSpinListener()`.
+- NOTE: 
+  - functions prefixed with `dispatch` will let parent boxes know of the event.
+  - add and remove listener functions can be used if you get programmatic access to the box.
 
-Another thing the box interface enables is the **interface** of variables settable from the DOM. with our example interface we could then go into the markup of some box and specify an `<box-example>` like so:
 
-
+Example use of the declared box:
 ```
-<example-box name="Ashoka Tano" boxClass="show-dual-weilding-sabers"></example-box>
+<example-box 
+  name="Ashoka Tano" 
+  boxClass="show-dual-weilding-sabers"
+  [onFirstSpin]="exampleBoxOnFirstSpin()"
+></example-box>
 ```
 
 Those properties will then be available on the instance and the box can react accordingly.

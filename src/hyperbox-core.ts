@@ -103,6 +103,7 @@ if (typeof document !== 'undefined') {
       box._boxId = newBoxId;
       box._name = boxConfig.name;
       // Add box to loaded boxes.
+      BoxUtils.CheckBoxRequirements(box);
       HyperBoxCore.AddBoxToLoadedBoxes(box);
       BoxUtils.BuildBoxInterfaces(box);
       BoxUtils.BuildBoxStandardVariables(box);

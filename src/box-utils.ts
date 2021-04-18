@@ -1,3 +1,6 @@
+import { Box } from "./box";
+import { BoxInterface } from "./types";
+
 /**
  * @author Alessandro Alberga
  * @description Box utils.
@@ -17,6 +20,11 @@ export class BoxUtils {
       return !Object.keys(value || {}).length
     }
     return true;
+  }
+
+  static CheckBoxRequirements(box: Box): void {
+    if (!box?._BoxConfig) throw new Error('HyperBox-JS: Must set _BoxConfig on box');
+    if (!box?._BoxConfig?.name) throw new Error('HyperBox-JS: Must set _BoxConfig name on box');
   }
 
   /**
@@ -111,22 +119,14 @@ export class BoxUtils {
    */
   static BuildBoxInterfaces(box) {
     if (box) {
-      const boxInterface = box.constructor._BoxInterface;
-      if (boxInterface) {
-        BoxUtils.BuildBoxInputs(box, boxInterface.Inputs || {});
-        if (boxInterface.Outputs) {
-          BoxUtils.BuildBoxOutputs(box, boxInterface.Outputs);
-        }
-      }
+      const boxInterface: BoxInterface = box.constructor._BoxInterface;
+      if (boxInterface?.Inputs) BoxUtils.BuildBoxGettersAndSetters(box, boxInterface.Inputs);
+      if (boxInterface?.Vars) BoxUtils.BuildBoxGettersAndSetters(box, boxInterface.Vars);
+      if (boxInterface?.Outputs) BoxUtils.BuildBoxOutputs(box, boxInterface.Outputs);
     }
   }
 
-  /**
-   * Build box inputs for a box.
-   *
-   * @param { any } inputsObject inputs object from _BoxInterface
-   */
-  static BuildBoxInputs(box, inputsObject) {
+  static BuildBoxGettersAndSetters(box, inputsObject: {[key: string]: any}) {
     const inputsWithStockProperties = {
       _parentBoxId: null,
       ...inputsObject,
@@ -138,9 +138,7 @@ export class BoxUtils {
         box[interfaceProp] = value;
         box.detectBoxChanges();
       }
-      box[getterName] = () => {
-        return box[interfaceProp];
-      }
+      box[getterName] = () => box[interfaceProp];
       if (
         inputsWithStockProperties[interfaceProp] !== null && 
         typeof inputsWithStockProperties[interfaceProp] !== 'undefined'
@@ -151,12 +149,7 @@ export class BoxUtils {
     });
   }
 
-  /**
-   * Build output events for a box.
-   *
-   * @param { any } inputsObject 
-   */
-  static BuildBoxOutputs(box, outputsObject) {
+  static BuildBoxOutputs(box, outputsObject: {[key: string]: any}) {
     Object.keys(outputsObject).forEach(interfaceProp => {
       const newBoxOutputEvent = new CustomEvent(`(${interfaceProp})`, { detail: box });
       const eventBoxName = `_event_${interfaceProp}`;

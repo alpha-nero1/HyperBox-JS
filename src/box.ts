@@ -1,5 +1,6 @@
 import { BoxUtils } from './box-utils';
 import { HyperBoxCore } from './hyperbox-core';
+import { BoxInterface, BoxConfig } from './types';
 
 const HtmlClass: any = (
   (typeof document !== 'undefined') ? 
@@ -21,6 +22,8 @@ export class Box extends HtmlClass {
   protected boxOnDisplayed: () => void;
   protected boxOnDestroyed: () => void;
   public display: (context: any) => string;
+  static _BoxConfig?: BoxConfig;
+  static _BoxInterface: BoxInterface;
 
   protected detectBoxChanges = () => BoxUtils.DisplayBox(this);
 
@@ -32,6 +35,7 @@ export class Box extends HtmlClass {
     this._boxId = HyperBoxCore.GetNewBoxId(boxConfig);
     this.id = this._boxId;
     this._name = boxConfig.name
+    BoxUtils.CheckBoxRequirements(this);
     BoxUtils.BuildBoxStandardVariables(this);
     BoxUtils.BuildBoxInterfaces(this);
     BoxUtils.DisplayBox(this)
