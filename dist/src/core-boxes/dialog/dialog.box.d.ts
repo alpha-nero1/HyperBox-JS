@@ -9,7 +9,9 @@ export declare class DialogBox extends Box {
         styleSheetPath: string;
     };
     static _BoxInterface: {
-        _dialogContext: {};
+        Inputs: {
+            _dialogContext: {};
+        };
     };
     private innerBox?;
     private _dialogContext?;

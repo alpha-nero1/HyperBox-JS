@@ -1,3 +1,4 @@
+import { BoxInterface, BoxConfig } from './types';
 declare const HtmlClass: any;
 /**
  * @author Alessandro Alberga
@@ -13,6 +14,8 @@ export declare class Box extends HtmlClass {
     protected boxOnDisplayed: () => void;
     protected boxOnDestroyed: () => void;
     display: (context: any) => string;
+    static _BoxConfig?: BoxConfig;
+    static _BoxInterface: BoxInterface;
     protected detectBoxChanges: () => void;
     /**
      * Initialise our special box!

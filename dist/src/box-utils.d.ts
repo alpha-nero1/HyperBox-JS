@@ -1,3 +1,4 @@
+import { Box } from "./box";
 /**
  * @author Alessandro Alberga
  * @description Box utils.
@@ -9,6 +10,7 @@ export declare class BoxUtils {
      * @param { String } str the string to preform null or empty check on.
      */
     static IsNullOrEmpty: (value: any) => boolean;
+    static CheckBoxRequirements(box: Box): void;
     /**
      * Build a function name that uses a certain prefix.
      *
@@ -54,18 +56,12 @@ export declare class BoxUtils {
      * @param { any } box box.
      */
     static BuildBoxInterfaces(box: any): void;
-    /**
-     * Build box inputs for a box.
-     *
-     * @param { any } inputsObject inputs object from _BoxInterface
-     */
-    static BuildBoxInputs(box: any, inputsObject: any): void;
-    /**
-     * Build output events for a box.
-     *
-     * @param { any } inputsObject
-     */
-    static BuildBoxOutputs(box: any, outputsObject: any): void;
+    static BuildBoxGettersAndSetters(box: any, inputsObject: {
+        [key: string]: any;
+    }): void;
+    static BuildBoxOutputs(box: any, outputsObject: {
+        [key: string]: any;
+    }): void;
     /**
      * Build the standard variables that go on boxes.
      *

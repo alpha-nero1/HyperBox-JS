@@ -22,7 +22,7 @@ export class BoxUtils {
     return true;
   }
 
-  static CheckBoxRequirements(box: Box): void {
+  static CheckBoxRequirements(box: any): void {
     if (!box?._BoxConfig) throw new Error('HyperBox-JS: Must set _BoxConfig on box');
     if (!box?._BoxConfig?.name) throw new Error('HyperBox-JS: Must set _BoxConfig name on box');
   }

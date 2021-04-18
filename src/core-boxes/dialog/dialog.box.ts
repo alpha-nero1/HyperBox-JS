@@ -13,14 +13,14 @@ export class DialogBox extends Box {
   }
 
   static _BoxInterface = {
-    _dialogContext: {}
+    Inputs: {
+      _dialogContext: {}
+    }
   }
 
   private innerBox?: Box;
 
   private _dialogContext?: any;
-
-
 
   constructor() {
     super();

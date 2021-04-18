@@ -35,7 +35,7 @@ export class Box extends HtmlClass {
     this._boxId = HyperBoxCore.GetNewBoxId(boxConfig);
     this.id = this._boxId;
     this._name = boxConfig.name
-    BoxUtils.CheckBoxRequirements(this);
+    BoxUtils.CheckBoxRequirements(this.constructor);
     BoxUtils.BuildBoxStandardVariables(this);
     BoxUtils.BuildBoxInterfaces(this);
     BoxUtils.DisplayBox(this)
