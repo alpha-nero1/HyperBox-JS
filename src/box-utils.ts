@@ -98,13 +98,14 @@ export class BoxUtils {
    */
   static DisplayBox(box) {
     if (box && typeof box.display === 'function') {
-      // Allows change detection to happen bottom up if a prent was set.
-      if (box._parentBox) {
-        box._parentBox.detectBoxChanges();
-      }
       BoxUtils.LoadDOMAttributes(box);
       const newMarkup = box.display(box);
       box.innerHTML = newMarkup;
+      if (box._pid) {
+        // Then refresh! Bravo! 👌
+        const parent = document.getElementById(box._pid);
+        parent.replaceChild(box, parent);
+      }
       if (box._init && typeof box.boxOnRedisplayed === 'function') {
         box.boxOnRedisplayed()
       }
@@ -191,30 +192,33 @@ export class BoxUtils {
       if (boxInterface) {
         for (let i = 0; i < box.attributes.length; i++) {
           const boxAttribute = box.attributes.item(i);
-          const { name: attributeName, value: attributeValue } = boxAttribute;
-          const trimmedName = BoxUtils.TrimFirstAndLastChar(attributeName);
-          if (BoxUtils.IsVariableInputProperty(attributeName) && boxInterface.Inputs && boxInterface.Inputs[trimmedName]) {
-            // NOTE: add extra logic here that somethow watches [] vars!
-            const setterName = BoxUtils.BuildSetterName(trimmedName);
-            if (typeof box[setterName] === 'function') {
-              box[trimmedName] = boxAttribute.value;
-            }
-          } else if (BoxUtils.IsOutputProperty(attributeName) && boxInterface.Outputs && boxInterface.Outputs[trimmedName]) {
-            // Add the listener.
-            const functionName = BoxUtils.GetFunctionNameFromFunctionCallString(attributeValue);
-            const parentBox = box.getParentBox();
-            box.addEventListener(attributeName, (ev) => parentBox[functionName](ev))
-          } else {
-            // Is normal stirng or number input property.
-            const setterName = BoxUtils.BuildSetterName(attributeName);
-            if (typeof box[setterName] === 'function') {
-              box[attributeName] = boxAttribute.value;
-            }
-          }
+          BoxUtils.LoadAttributeOntoBox(box, boxAttribute)
         }
       }
     }
+  }
 
+  static LoadAttributeOntoBox(box, boxAttribute) {
+    const boxInterface = box.constructor._BoxInterface;
+    const { name: attributeName, value: attributeValue } = boxAttribute;
+    if (BoxUtils.IsVariableInputProperty(attributeName) && boxInterface?.Inputs[attributeName]) {
+      const setterName = BoxUtils.BuildSetterName(attributeName);
+      if (typeof box[setterName] === 'function') {
+        box[attributeName] = boxAttribute.value;
+      }
+    } else if (BoxUtils.IsOutputProperty(attributeName) && boxInterface?.Outputs[attributeName]) {
+      // Add the listener.
+      const functionName = BoxUtils.GetFunctionNameFromFunctionCallString(attributeValue);
+      const parentBox = box.getParentBox();
+      box.addEventListener(attributeName, (ev) => parentBox[functionName](ev))
+    } else {
+      if (attributeName === "_pid") box.pid === boxAttribute.value;
+      // Is normal stirng or number input property.
+      const setterName = BoxUtils.BuildSetterName(attributeName);
+      if (typeof box[setterName] === 'function') {
+        box[attributeName] = boxAttribute.value;
+      }
+    }
   }
 
   /**

@@ -177,24 +177,26 @@ class BoxUtils {
         });
     }
     /**
-     * After a change is needed, re-use the box display function to re-set inner html.
-     *
-     * @param {*} box
-     */
-    static DisplayBox(box) {
-        if (box && typeof box.display === 'function') {
-            // Allows change detection to happen bottom up if a prent was set.
-            if (box._parentBox) {
-                box._parentBox.detectBoxChanges();
-            }
-            BoxUtils.LoadDOMAttributes(box);
-            const newMarkup = box.display(box);
-            box.innerHTML = newMarkup;
-            if (box._init && typeof box.boxOnRedisplayed === 'function') {
-                box.boxOnRedisplayed();
-            }
-        }
+   * After a change is needed, re-use the box display function to re-set inner html.
+   *
+   * @param {*} box 
+   */
+  static DisplayBox(box) {
+    if (box && typeof box.display === 'function') {
+      BoxUtils.LoadDOMAttributes(box);
+      const newMarkup = box.display(box);
+      box.innerHTML = newMarkup;
+      console.log(box)
+      if (box._pid) {
+        // Then refresh!
+        const parent = document.getElementById(box._pid);
+        parent.replaceChild(box, parent);
+      }
+      if (box._init && typeof box.boxOnRedisplayed === 'function') {
+        box.boxOnRedisplayed()
+      }
     }
+  }
     /**
      * Build box interfaces (setters and getters) if _BoxInterface present.
      *
@@ -218,6 +220,7 @@ class BoxUtils {
             const getterName = BoxUtils.BuildGetterName(interfaceProp);
             box[setterName] = (value) => {
                 box[interfaceProp] = value;
+                console.log('aa set new prop: ', interfaceProp, value)
                 box.detectBoxChanges();
             };
             box[getterName] = () => box[interfaceProp];
@@ -285,6 +288,7 @@ class BoxUtils {
                         box.addEventListener(attributeName, (ev) => parentBox[functionName](ev));
                     }
                     else {
+                        if (attributeName === "_pid") box.pid === boxAttribute.value;
                         // Is normal stirng or number input property.
                         const setterName = BoxUtils.BuildSetterName(attributeName);
                         if (typeof box[setterName] === 'function') {
