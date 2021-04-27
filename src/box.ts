@@ -23,7 +23,7 @@ export class Box extends HtmlClass {
   static _BoxConfig?: BoxConfig;
   static _BoxInterface: BoxInterface;
 
-  protected detectBoxChanges = () => BoxUtils.DisplayBox(this);
+  public detectBoxChanges = () => BoxUtils.DisplayBox(this);
 
   /**
    * Initialise our special box!
@@ -31,7 +31,7 @@ export class Box extends HtmlClass {
   connectedCallback() {
     const boxConfig = (this.constructor as any)._BoxConfig;
     this._boxId = HyperBoxCore.GetNewBoxId(boxConfig);
-    this.id = this._boxId;
+    if (!this.id) this.id = this._boxId;
     this._name = boxConfig.name
     BoxUtils.CheckBoxRequirements(this.constructor);
     BoxUtils.BuildBoxStandardVariables(this);
@@ -53,7 +53,7 @@ export class Box extends HtmlClass {
    * Allows any box to terminate itself.
    */
   terminateSelf() {
-    this._container.remove();
+    (this as any as HTMLElement).remove();
     if (typeof this.boxOnDestroyed === 'function') this.boxOnDestroyed();
   }
 

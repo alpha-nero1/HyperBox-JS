@@ -1,4 +1,4 @@
-import { Box } from '../../box.js';
+import { Box } from '../../box';
 /**
  * @author Alessandro Alberga
  * @description Dialog box implementation.
@@ -13,7 +13,6 @@ export declare class DialogBox extends Box {
             _dialogContext: {};
         };
     };
-    private innerBox?;
     private _dialogContext?;
     constructor();
     /**
@@ -40,7 +39,7 @@ export declare class DialogBox extends Box {
     /**
      * Getter for the inner box.
      */
-    getInnerBox(): string;
+    getInnerBox(): any;
     /**
      * Underlay was clicked handler.
      */

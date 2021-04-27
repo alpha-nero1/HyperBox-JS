@@ -14,7 +14,7 @@ export declare class Box extends HtmlClass {
     display: (context: any) => string;
     static _BoxConfig?: BoxConfig;
     static _BoxInterface: BoxInterface;
-    protected detectBoxChanges: () => void;
+    detectBoxChanges: () => void;
     /**
      * Initialise our special box!
      */

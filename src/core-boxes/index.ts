@@ -1,7 +1,3 @@
-import { NavigatorBox } from './navigator/navigator.box';
-import { DialogBox } from './dialog/dialog.box';
-
-export {
-  NavigatorBox,
-  DialogBox
-};
+export * from './navigator/navigator.box';
+export * from './dialog/dialog.box';
+export * from './navigator/types/nav-route.interface';

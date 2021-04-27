@@ -1,5 +1,4 @@
-import { Box } from '../../box.js';
-import { HyperBoxCore } from '../../hyperbox-core';
+import { Box } from '../../box';
 
 /**
  * @author Alessandro Alberga
@@ -8,7 +7,7 @@ import { HyperBoxCore } from '../../hyperbox-core';
 export class DialogBox extends Box {
 
   static _BoxConfig = {
-    name: 'DialogBox',
+    name: 'dialog-box',
     styleSheetPath: './box-core/core-boxes/dialog/dialog.box.css'
   }
 
@@ -17,8 +16,6 @@ export class DialogBox extends Box {
       _dialogContext: {}
     }
   }
-
-  private innerBox?: Box;
 
   private _dialogContext?: any;
 
@@ -36,7 +33,7 @@ export class DialogBox extends Box {
    */
   insertDialogInnerBox(boxClassName, argumentsObject, onSuccess, onError) {
     // We can make our dynamic box by calling make and chaining it with set parent call.
-    this.innerBox = HyperBoxCore.MakeBox(boxClassName, this._boxId);
+    this.innerHTML = `<${boxClassName}></${boxClassName}>`;
     (this as any).set_dialogContext({ ...argumentsObject });
     (this.innerBox as any)._dialogContext = {
       closeOnSuccess: (...args) => {

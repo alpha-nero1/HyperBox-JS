@@ -73,6 +73,7 @@ export declare class BoxUtils {
      * @param { any } box box.
      */
     static LoadDOMAttributes(box: any): void;
+    static LoadAttributeOntoBox(box: any, boxAttribute: any): void;
     /**
      * Check if a property name is an input.
      *

@@ -1,5 +1,6 @@
 import { Box } from '../../box';
-import { HyperBoxCore } from '../../hyperbox-core';
+import { safeExec } from '../../utils/safe-exec';
+import { NavRouteItem, NavRoutes } from './types/nav-route.interface';
 
 /**
  * @author Alessandro Alberga
@@ -8,7 +9,7 @@ import { HyperBoxCore } from '../../hyperbox-core';
 export class NavigatorBox extends Box {
 
   static _BoxConfig = {
-    name: 'NavigatorBox'
+    name: 'navigator-box'
   }
 
   static _BoxInterface = {
@@ -17,12 +18,12 @@ export class NavigatorBox extends Box {
     }
   }
 
-  protected _routes: any;
-  protected _loadedRoutes = new Map();
-  protected _currentBox?: Box;
+  protected _routes: NavRoutes;
+  protected _activeRoute?: string;
 
-  constructor() { 
-    super();
+  get innerBox(): Box {
+    if (!this.children?.length) return null;
+    return this.children[0] as Box;
   }
 
   /**
@@ -32,102 +33,44 @@ export class NavigatorBox extends Box {
     this.dispatchNavigatorOnLoaded();
   }
 
-  /**
-   * Set the routes.
-   *
-   * @param { [key]: { boxClassName } } routes routes object.
-   */
-  setRoutes(routes, routeOptions) {
+  setRoutes(routes: NavRoutes) {
     this._routes = routes;
-    if (routeOptions) {
-      if (routeOptions.savesRouteState) {
-        this._loadedRoutes = new Map();
-      }
-    }
   }
 
-  /**
-   * Cleanup an old box.
-   */
-  cleanupOldBox() {
-    if (this._currentBox) {
-      if (typeof (this._currentBox as any).boxOnDestroyed === 'function') {
-        (this._currentBox as any).boxOnDestroyed();
-      }
-      this.setCurrentBox(null);
-    }
-  }
+  cleanupOldBox() { this.innerBox?.terminateSelf(); }
 
-  /**
-   * Add arguments to current box.
-   *
-   * @param { any } argumentsObject arguments object.
-   */
   addArgumentsToCurrentBox(argumentsObject) {
-    if (
-      this._currentBox && 
-      argumentsObject && 
-      typeof argumentsObject === 'object'
-    ) {
-      (this._currentBox as any)._routeContext = argumentsObject;
-    }
-    (this._currentBox as any).detectBoxChanges();
+    if (!argumentsObject || !this.innerBox) return;
+    (this.innerBox as any)._routeContext = argumentsObject;
+    safeExec(this.innerBox?.detectBoxChanges);
   }
 
-  /**
-   * Get the rendered current box.
-   */
-  getCurrentBox() {
-    if (this._currentBox) {
-      return this._currentBox.display(this._currentBox);
-    }
-    return '';
+  setCurrentBox(box: typeof Box) {
+    const { _BoxConfig: config } = box;
+    if (!config?.name) throw new Error('HyperBox-JS: Tried to set a route box without a _BoxConfig name');
+    this.innerHTML = `<${config.name}></${config.name}>`
   }
 
-  /**
-   * Setter for the current box.
-   *
-   * @param { any } box box. 
-   */
-  setCurrentBox(box) {
-    this._currentBox = box;
-    this.innerHTML = this.getCurrentBox();
+  gotoRoute(route: string, argumentsObject) {
+    const routeEntry: NavRouteItem = this._routes[route]
+    if (!route) throw new Error(`BoxJS: Could not find route "${route}"`);
+    this.cleanupOldBox()
+    this._activeRoute = route;
+    const { box } = routeEntry;
+    // Go to the new route.
+    this.setCurrentBox(box);
+    this.addEventListener( 'DOMNodeInserted', function ( event ) {
+      if (event.target.parentNode.id == this.id) {
+        //direct descendant
+        // Set the args.
+        this.addArgumentsToCurrentBox(argumentsObject);
+        safeExec(this.innerBox.onNaviagatedTo);    
+      };
+    }, false );
+    
   }
 
-  /**
-   * Go to a route.
-   *
-   * @param { String } routeName 
-   * @param  { any } argumentsObject route arguments.
-   */
-  gotoRoute(routeName, argumentsObject) {
-    const route = this._routes[routeName]
-    console.log('aa this navigator id', this._boxId)
-    if (route) {
-      this.cleanupOldBox()
-      const { boxClassName } = route;
-      let boxToGoto;
-      if (this._loadedRoutes && this._loadedRoutes.get(routeName)) {
-        boxToGoto = this._loadedRoutes.get(routeName);
-      } else {
-        boxToGoto = HyperBoxCore.MakeBox(boxClassName, this._boxId);
-        if (this._loadedRoutes) {
-          this._loadedRoutes.set(routeName, boxToGoto)
-        }
-      }
-      // Go to the new route.
-      this.setCurrentBox(boxToGoto);
-      // Set the args.
-      this.addArgumentsToCurrentBox(argumentsObject);
-      if (typeof (this._currentBox as any).boxOnNavigatedTo === 'function') {
-        (this._currentBox as any).boxOnNavigatedTo();
-      }
-    } else {
-      throw new Error(`BoxJS: Could not find route "${routeName}"`);
-    }
-  }
+  private dispatchNavigatorOnLoaded = () => {
 
-  private dispatchNavigatorOnLoaded = () => null;
-
-  display = () => `${this.getCurrentBox()}`;
+  };
 }
